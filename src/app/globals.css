@@ -1,0 +1,46 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.section-gray {
+  @apply bg-gray-100;
+}
+
+.section {
+  @apply py-14 sm:py-16 lg:py-24;
+}
+
+.button-dark {
+  @apply bg-success-800 text-white hover:bg-success-500;
+}
+
+.description-sm {
+  @apply text-sm text-gray-500;
+}
+
+/* styles/globals.css */
+.custom-quill {
+  h1 {
+    @apply text-4xl font-bold;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold;
+  }
+
+  h3 {
+    @apply text-2xl font-medium;
+  }
+
+  h4 {
+    @apply text-xl font-medium;
+  }
+
+  p {
+    @apply text-base;
+  }
+
+  strong {
+    @apply font-bold;
+  }
+}
