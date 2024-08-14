@@ -15,52 +15,50 @@ interface IProps {
 
 export const CardProgram = (props: IProps) => {
   const { language } = props
-  const defaultImage =
-    'https://img.freepik.com/foto-gratis/pequeno-globo-mano_23-2147798341.jpg?t=st=1715344761~exp=1715348361~hmac=9013424d77baae6288ab7916798267aa52c905c37fb0f5d6c915095fe92afd1d&w=1380'
 
-  console.log(urlBase)
   const path = urlBase?.slice(0, -1)
-  const urlImage = `${path}${language?.image}`
+  const urlImage = language?.image
+    ? `${path}${language?.image}`
+    : '/images/placeholder-card.webp'
 
   return (
-    <>
-      <Card
-        key={language.id}
-        shadow="none"
-        radius="sm"
-        isHoverable
-      >
-        <CardBody className="p-0 w-full min-h-48">
-          <main className="flex gap-5 w-full">
-            <Image
-              src={urlImage ?? defaultImage}
-              alt={language.nombre}
-              removeWrapper
-              className="w-80"
-            />
-            <main className="p-3 flex flex-col gap-5">
-              <section className="flex flex-col gap-2">
-                <Chip
-                  radius="sm"
-                  size="sm"
-                  variant="flat"
-                  color={language.is_active ? 'success' : 'danger'}
-                >
-                  {language.is_active ? 'Activo' : 'Inactivo'}
-                </Chip>
-                <div>
-                  <h1 className="text-5xl font-bold uppercase hover:cursor-pointer">
-                    {language.nombre}
-                  </h1>
-                  <h3 className="font-medium text-gray-500">
-                    Cod: {language.codigo}
-                  </h3>
-                </div>
-              </section>
-            </main>
+    <Card
+      key={language.id}
+      shadow="none"
+      radius="sm"
+      isPressable
+    >
+      <CardBody className="p-0 w-full min-h-48 border">
+        <main className="flex gap-5 w-full">
+          <Image
+            src={urlImage}
+            alt={language.nombre}
+            removeWrapper
+            className="w-80 max-h-48 object-cover rounded-l-md"
+            radius="none"
+          />
+          <main className="p-3 flex flex-col gap-5">
+            <section className="flex flex-col gap-2">
+              <Chip
+                radius="sm"
+                size="sm"
+                variant="flat"
+                color={language.is_active ? 'success' : 'danger'}
+              >
+                {language.is_active ? 'Activo' : 'Inactivo'}
+              </Chip>
+              <div>
+                <h1 className="text-5xl font-bold uppercase hover:cursor-pointer">
+                  {language.nombre}
+                </h1>
+                <h3 className="font-medium text-gray-500">
+                  Cod: {language.codigo}
+                </h3>
+              </div>
+            </section>
           </main>
-        </CardBody>
-      </Card>
-    </>
+        </main>
+      </CardBody>
+    </Card>
   )
 }

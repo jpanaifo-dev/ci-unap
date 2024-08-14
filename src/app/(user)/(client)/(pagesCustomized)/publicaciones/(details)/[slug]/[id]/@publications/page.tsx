@@ -1,11 +1,11 @@
-import { fetchCore } from '@/api'
+import { fetchPublicationsList } from '@/api'
 import { OthersPublications } from '@/modules/client'
-import { IPublication, IResApi } from '@/types'
+import { IPublicationList, IResApi } from '@/types'
 import { Divider } from '@nextui-org/react'
 
 export default async function Page() {
-  const res = await fetchCore('portal/PublicacionList/?is_active=true', {
-    method: 'GET',
+  const res = await fetchPublicationsList({
+    is_active: true,
   })
 
   if (!res.ok) {
@@ -27,8 +27,8 @@ export default async function Page() {
     )
   }
 
-  const publications: IResApi<IPublication> =
-    (await res.json()) as IResApi<IPublication>
+  const publications: IResApi<IPublicationList> =
+    (await res.json()) as IResApi<IPublicationList>
 
   return (
     <>

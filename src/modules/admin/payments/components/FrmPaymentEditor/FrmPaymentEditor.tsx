@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { HeaderSection } from '@/modules/admin'
+import { HeaderSection, LayoutFrmHorizontal } from '@/modules/admin'
 import { IPayments } from '@/types'
 import { Button } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
@@ -82,38 +82,56 @@ export const FrmPaymentEditor = (props: IProps) => {
 
   return (
     <>
-      <HeaderSection
-        title={title}
-        subtitle={subtitle}
-      />
-      <FormProvider {...methods}>
-        <form
-          onSubmit={methods.handleSubmit(onSubmit)}
-          className="flex flex-col gap-5 max-w-2xl"
-        >
-          <InfoData />
-          <PaymentsConceptsData />
-          <ExpedienteData />
-          <footer className="flex items-center gap-3 justify-end">
-            <Button
-              className="button-dark"
-              radius="sm"
-              type="submit"
-              isLoading={loading}
-              isDisabled={loading}
+      <main className="w-full flex flex-col items-center">
+        <section className="flex flex-col gap-4 section-panel w-full  max-w-5xl">
+          <HeaderSection
+            title={title}
+            subtitle={subtitle}
+          />
+          <FormProvider {...methods}>
+            <form
+              onSubmit={methods.handleSubmit(onSubmit)}
+              className="flex flex-col gap-5"
             >
-              {dataDeafult?.id ? 'Actualizar' : 'Guardar'}
-            </Button>
+              <LayoutFrmHorizontal
+                title="Información del pago"
+                subtitle="Completa los datos del pago"
+              >
+                <InfoData />
+              </LayoutFrmHorizontal>
 
-            <Button
-              radius="sm"
-              onPress={handleExit}
-            >
-              Cancelar
-            </Button>
-          </footer>
-        </form>
-      </FormProvider>
+              <LayoutFrmHorizontal
+                title="Conceptos de pago y expediente"
+                subtitle="Datos del concepto de pago y expediente"
+              >
+                <section className="flex flex-col gap-5">
+                  <PaymentsConceptsData />
+                  <ExpedienteData />
+                </section>
+              </LayoutFrmHorizontal>
+
+              <footer className="flex items-center gap-3 justify-end">
+                <Button
+                  className="button-dark"
+                  radius="sm"
+                  type="submit"
+                  isLoading={loading}
+                  isDisabled={loading}
+                >
+                  {dataDeafult?.id ? 'Actualizar' : 'Guardar'}
+                </Button>
+
+                <Button
+                  radius="sm"
+                  onPress={handleExit}
+                >
+                  Cancelar
+                </Button>
+              </footer>
+            </form>
+          </FormProvider>
+        </section>
+      </main>
       <DialogAction
         isOpen={isOpen}
         title="Guardar cambios"

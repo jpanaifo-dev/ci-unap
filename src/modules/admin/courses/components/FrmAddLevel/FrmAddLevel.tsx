@@ -96,7 +96,7 @@ export const FrmAddLevel = (props: IProps) => {
         isOpen
         onClose={handleExit}
         radius="sm"
-        size="4xl"
+        size="xl"
       >
         <ModalContent>
           <ModalHeader>

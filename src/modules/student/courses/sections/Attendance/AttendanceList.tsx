@@ -3,19 +3,26 @@
 import { useAttendance } from '@/modules/student'
 import { useEffect } from 'react'
 import { useParams } from 'next/navigation'
-import { IAsistencia, IResApi } from '@/types'
+import { IAsistencia, IInscriptions, IResApi } from '@/types'
 import { Skeleton } from '@nextui-org/react'
 
-export const AttendanceList = () => {
+interface IProps {
+  dataInscriptions?: IInscriptions
+}
+
+export const AttendanceList = (props: IProps) => {
+  const { dataInscriptions } = props
   const { getAttendance, listAttendaces, loading } = useAttendance()
   const { id } = useParams()
 
-  const id_group = id as string
-
   useEffect(() => {
     getAttendance({
-      inscripcion__grupo__id: id_group,
-      inscripcion__matricula__expediente__id: '1',
+      inscripcion__grupo__id: Number(id),
+      inscripcion__grupo__docente__id: dataInscriptions?.grupo?.docente?.id,
+      inscripcion__id: dataInscriptions?.id,
+      inscripcion__matricula__id: dataInscriptions?.matricula?.id,
+      inscripcion__matricula__expediente__id:
+        dataInscriptions?.matricula?.expediente?.id,
     })
   }, [])
 

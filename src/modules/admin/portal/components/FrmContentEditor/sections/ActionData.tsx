@@ -1,10 +1,11 @@
-import { IPublication } from '@/types'
+'use client'
+import { IPublicationFile } from '@/types'
 import { Switch } from '@nextui-org/react'
 import { useFormContext, Controller } from 'react-hook-form'
-import { IconEyeCheck, IconSpeakerphone } from '@tabler/icons-react'
+import { IconPlayerPlay, IconPhoto } from '@tabler/icons-react'
 
 export const ActionData = () => {
-  const { control } = useFormContext<IPublication>()
+  const { control } = useFormContext<IPublicationFile>()
 
   return (
     <>
@@ -13,7 +14,7 @@ export const ActionData = () => {
           id="icon"
           className="p-2 rounded-full shadow-md"
         >
-          <IconSpeakerphone
+          <IconPlayerPlay
             size={32}
             strokeWidth={1.5}
           />
@@ -22,10 +23,10 @@ export const ActionData = () => {
           id="content"
           className="w-full"
         >
-          <h1 className="font-bold">Activar esta publicación</h1>
+          <h1 className="font-bold">Activar contenido</h1>
           <p className="text-sm text-gray-500">
-            Si está seleccionado, la publicación será visible para los usuarios
-            del portal.
+            Si está seleccionado, el archivo será visible para los usuarios del
+            portal.
           </p>
         </div>
         <Controller
@@ -41,12 +42,12 @@ export const ActionData = () => {
           )}
         />
       </section>
-      <section className="flex items-start gap-4 w-full  rounded-lg p-3 bg-gray-50 border border-gray-200">
+      <section className="flex items-start gap-4 w-full rounded-lg p-3 bg-gray-50 border border-gray-200">
         <div
           id="icon"
           className="p-2 rounded-full shadow-md"
         >
-          <IconEyeCheck
+          <IconPhoto
             size={32}
             strokeWidth={1.5}
           />
@@ -55,21 +56,21 @@ export const ActionData = () => {
           id="content"
           className="w-full"
         >
-          <h1 className="font-bold">Visible en el banner</h1>
+          <h1 className="font-bold">Mostar como portada de publicación</h1>
           <p className="text-sm text-gray-500">
-            Si está seleccionado, la publicación será visible en el banner del
-            portal.
+            Si está seleccionado, el archivo será visible en la portada de la
+            publicación. En la lista de publicaciones del portal.
           </p>
         </div>
         <Controller
           control={control}
-          name="is_banner"
+          name="is_portada"
           render={({ field: { value, onChange } }) => (
             <Switch
-              aria-label="is_banner"
+              aria-label="is_portada"
               onChange={onChange}
               isSelected={value}
-              title="Visible en el banner"
+              title="Portada"
             />
           )}
         />

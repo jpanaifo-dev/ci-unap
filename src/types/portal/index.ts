@@ -1,11 +1,22 @@
-import { ITestimony } from './ITestimony'
-import { IPublication } from './IPublication'
-import { IPublicationFile } from './IPublicationFile'
-import { IPublicationType } from './IPublicationType'
-import { IPublicationFileType } from './IPublicationFileType'
+import { ITestimony, ITestimonyFilter, ITestimonyList } from './ITestimony'
+import {
+  IPublication,
+  IPublicationFilter,
+  IPublicationList,
+} from './IPublication'
+import {
+  IPublicationFile,
+  IPublicationFileFilter,
+  IPublicationFileList,
+} from './IPublicationFile'
+import { IPublicationType, IPublicationTypeFilter } from './IPublicationType'
+import {
+  IPublicationFileType,
+  IPublicationFileTypeFilter,
+} from './IPublicationFileType'
 
-import { IPortalFileType } from './IPortalFileType'
-import { IPortalFile } from './IPortalFile'
+import { IPortalFileType, IPortalFileTypeFilter } from './IPortalFileType'
+import { IPortalFile, IPortalFileList, IPortalFileFilter } from './IPortalFile'
 
 export type {
   ITestimony,
@@ -15,4 +26,15 @@ export type {
   IPublicationFileType,
   IPortalFileType,
   IPortalFile,
+  IPublicationFilter,
+  IPublicationList,
+  IPublicationTypeFilter,
+  IPublicationFileFilter,
+  IPublicationFileList,
+  IPublicationFileTypeFilter,
+  IPortalFileTypeFilter,
+  IPortalFileFilter,
+  IPortalFileList,
+  ITestimonyFilter,
+  ITestimonyList,
 }

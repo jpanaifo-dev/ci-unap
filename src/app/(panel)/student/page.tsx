@@ -1,6 +1,6 @@
-import { fetchCore } from '@/api'
 import { BannerSection, PublicationsList } from '@/modules/core'
 import { IPublicationFile, IResApi } from '@/types'
+import { fetchPublicationsFileList } from '@/api'
 
 interface IProps {
   searchParams: {
@@ -10,11 +10,8 @@ interface IProps {
 
 export default async function page(props: IProps) {
   const {
-    searchParams: { search, date, page },
+    searchParams: { search, page },
   } = props
-
-  const query = search ? `&publicacion__titulo__icontains=${search}` : ''
-  const currentPage = page ? `&page=${page}` : ''
 
   let publications: IResApi<IPublicationFile> = {
     count: 0,
@@ -23,23 +20,26 @@ export default async function page(props: IProps) {
     results: [],
   }
 
-  const res = await fetchCore(
-    `portal/PublicacionFileList/?id=${query}&tipo=&fecha=&is_portada=true&publicacion__fecha=${date}&is_active=true&is_banner=${currentPage}`,
-    {
-      method: 'GET',
+  try {
+    const res = await fetchPublicationsFileList({
+      page: Number(page) || undefined,
+      publicacion__titulo__icontains: search ? search.toString() : '',
+      is_portada: true,
+    })
 
-      cache: 'no-cache',
+    if (res?.ok) {
+      publications = await res.json()
+    } else {
+      console.error('Error fetching publications')
     }
-  )
-
-  if (res.status === 200) {
-    publications = (await res.json()) as IResApi<IPublicationFile>
+  } catch (error) {
+    console.error(error)
   }
 
   return (
-    <>
+    <main>
       <BannerSection />
       {<PublicationsList publications={publications} />}
-    </>
+    </main>
   )
 }

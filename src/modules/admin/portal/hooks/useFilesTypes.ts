@@ -1,11 +1,7 @@
 'use client'
 import { useState } from 'react'
-import { IPortalFileType, IResApi } from '@/types'
-import { fetchCore } from '@/api'
-interface IQuery {
-  page?: number
-  name?: string
-}
+import { fetchTipo } from '@/api'
+import { IPortalFileType, IResApi, IPortalFileTypeFilter } from '@/types'
 
 export const useFilesTypes = () => {
   const [loading, setLoading] = useState<boolean>(false)
@@ -13,12 +9,10 @@ export const useFilesTypes = () => {
     null
   )
 
-  const getPortalFilesTypes = async (props: IQuery) => {
+  const getPortalFilesTypes = async (filter: IPortalFileTypeFilter) => {
     setLoading(true)
-    const { page, name } = props
 
-    const path = `portal/tipo/?page=${page}&nombre__icontains=${name}`
-    const response = await fetchCore(path, { method: 'GET' })
+    const response = await fetchTipo(filter)
 
     if (!response?.ok) {
       throw new Error('Error al cargar las modalidades')

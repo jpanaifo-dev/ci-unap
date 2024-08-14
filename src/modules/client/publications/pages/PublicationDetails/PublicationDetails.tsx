@@ -1,5 +1,5 @@
 'use client'
-import { IPublication, IPublicationFile, IResApi } from '@/types'
+import { IPublicationList, IPublicationFile, IResApi } from '@/types'
 import { converDate } from '@/utils'
 import { BreadcrumbItem, Breadcrumbs, Chip, Image } from '@nextui-org/react'
 import { ImagesSection } from './ImagesSection'
@@ -8,7 +8,7 @@ import { renderContent } from '@/modules/core'
 
 interface IProps {
   publicationFiles: IResApi<IPublicationFile>
-  publication?: IPublication
+  publication?: IPublicationList
 }
 
 const generateBreadcrumbs = (pathname: string) => {

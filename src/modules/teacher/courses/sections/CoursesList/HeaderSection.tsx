@@ -60,6 +60,7 @@ export const HeaderSection = () => {
               }
               radius="sm"
               selectedKeys={[value] || ['']}
+              // defaultSelectedKeys={[value] || ['']}
               onChange={(value) => handleChange(value.target.value)}
               disallowEmptySelection
               items={activeValues}

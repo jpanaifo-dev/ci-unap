@@ -12,6 +12,8 @@ interface IQGroups {
   date_start?: string
   date_end?: string
   page: number
+  is_active?: boolean
+  nivel_id?: number
 }
 
 export const useGroups = () => {
@@ -29,6 +31,8 @@ export const useGroups = () => {
       number_doc_teacher,
       surname_teacher,
       page,
+      is_active,
+      nivel_id,
     } = query
     const dateEnd = date_end ? `&fecha_final__year=${date_end}` : ''
     const dateStart = date_start ? `&fecha_inicio__year=${date_start}` : ''
@@ -47,8 +51,10 @@ export const useGroups = () => {
     const surnameTeacher = surname_teacher
       ? `&docente__persona__apellido_paterno__icontains=${surname_teacher}`
       : ''
+    const isActive = is_active ? `&is_active==${is_active}` : ''
+    const nivelId = nivel_id ? `&modulo__nivel__id=${nivel_id}` : ''
 
-    const path = `GrupoList/?${dateEnd}${dateStart}${nameModulo}${nameNivel}${nameTeacher}${numberDocTeacher}${surnameTeacher}&page=${page}`
+    const path = `GrupoList/?${dateEnd}${dateStart}${nameModulo}${nameNivel}${nameTeacher}${numberDocTeacher}${surnameTeacher}&page=${page}${isActive}${nivelId}`
     const response = await fetchGestor(path, { method: 'GET' })
 
     if (response?.detail) {

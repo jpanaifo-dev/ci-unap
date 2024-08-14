@@ -48,15 +48,11 @@ export const ListPublicationTypes = () => {
     usePublicationsTypes()
   const pathname = usePathname()
 
-  const isPath = pathname === '/admin/portal/publicaciones/tipo-publicaciones'
-
   useEffect(() => {
-    if (isPath) {
-      getPublicationsTypes({
-        page,
-        name: query,
-      })
-    }
+    getPublicationsTypes({
+      page,
+      nombre__icontains: query,
+    })
   }, [query, page, pathname])
 
   const dataList: IPortalFileType[] = listPublicationsType?.results || []
@@ -65,7 +61,7 @@ export const ListPublicationTypes = () => {
     return {
       key: item?.id,
       nombre: item?.nombre,
-      status: item?.is_active ? 'Activo' : 'Inactivo',
+      status: item?.is_active,
       actions: 'actions',
     }
   })

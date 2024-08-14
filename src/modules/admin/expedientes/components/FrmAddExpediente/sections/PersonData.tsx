@@ -11,8 +11,9 @@ export const PersonData = () => {
   const [isOpen, setIsOpen] = useState(false)
   const {
     control,
-    formState: { errors },
     setValue,
+    watch,
+    formState: { errors },
   } = useFormContext<IProceeding>()
 
   const handleSelectPerson = (person: any) => {
@@ -26,7 +27,7 @@ export const PersonData = () => {
         control={control}
         name="persona"
         rules={{
-          required: 'Ingrese un nombre',
+          required: 'Seleccione un estudiante',
         }}
         render={({ field: { value, onChange } }) => (
           <Input
@@ -36,11 +37,16 @@ export const PersonData = () => {
             placeholder="Seleccionar estudiante"
             radius="sm"
             variant="bordered"
-            value={value?.nombres}
-            onChange={onChange}
+            value={
+              value
+                ? `${value.nombres} ${value.apellido_paterno} ${value.apellido_materno}`
+                : ''
+            }
+            onValueChange={onChange}
             description="Seleccione el estudiante al que pertenece el expediente"
-            isInvalid={errors.persona !== undefined}
-            errorMessage={errors.persona?.message as string}
+            isRequired
+            errorMessage={'Seleccione un estudiante'}
+            readOnly={true}
             endContent={
               <div>
                 <Button

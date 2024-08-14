@@ -1,91 +1,37 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import { useEffect, useState } from 'react'
-import { IPublication } from '@/types'
-import {
-  TableCustom,
-  IColumns,
-  IRows,
-  IActions,
-  usePublications,
-} from '@/modules/admin'
-import { usePathname } from 'next/navigation'
+import { IPublicationList } from '@/types'
+import { TableCustom, IRows, usePublications } from '@/modules/admin'
 import { formatDate } from '@/utils'
 import { renderContent } from '@/modules/core'
-
-const col: IColumns[] = [
-  {
-    key: 'key',
-    label: 'Id',
-    align: 'center',
-  },
-  {
-    key: 'titulo',
-    label: 'Titulo',
-    align: 'center',
-  },
-  {
-    key: 'contenido',
-    label: 'Contenido',
-    align: 'center',
-  },
-  {
-    key: 'fecha',
-    label: 'Fecha de publicacion',
-    align: 'center',
-  },
-  {
-    key: 'tipo',
-    label: 'Tipo de publicacion',
-    align: 'center',
-  },
-  {
-    key: 'banner',
-    label: 'Visualizar en banner',
-    align: 'center',
-  },
-  {
-    key: 'status',
-    label: 'Estado',
-    align: 'center',
-  },
-
-  {
-    key: 'actions',
-    label: 'Acciones',
-    align: 'center',
-  },
-]
-
-const actions: IActions[] = [
-  {
-    label: 'Editar',
-    href: '',
-  },
-  {
-    label: 'Añadir contenido',
-    href: 'contenido',
-  },
-]
+import { TopContent } from './TopContent'
+import { useFilterFromUrl } from '@/hooks'
+import { col, actions } from './ListColumns'
 
 export const ListPublications = () => {
-  const [query, setQuery] = useState('')
   const [page, setPage] = useState(1)
   const { getPublications, listPublications, loading } = usePublications()
-  const pathname = usePathname()
+  const { getParams } = useFilterFromUrl()
 
-  const isContent = pathname === '/admin/portal/publicaciones'
+  const query = getParams('query', '')
+  const queryType = getParams('queryType', '')
+  const date = getParams('date', '')
+  const status = getParams('status', '')
+  const type = getParams('publicationType', '')
 
   useEffect(() => {
-    if (isContent) {
-      getPublications({
-        page,
-        name: query,
-      })
-    }
-  }, [query, page, pathname])
+    getPublications({
+      contenido__icontains: query && queryType === 'contenido' ? query : '',
+      titulo__icontains: query && queryType === 'titulo' ? query : '',
+      fecha: date || '',
+      is_active:
+        status === 'true' ? true : status === 'false' ? false : undefined,
+      tipo: Number(type) || undefined,
+    })
+  }, [query, page, date, status, type])
 
-  const publications: IPublication[] = listPublications?.results || []
+  const publications: IPublicationList[] = listPublications?.results || []
 
   const rows: IRows[] = publications?.map((item) => {
     return {
@@ -101,26 +47,21 @@ export const ListPublications = () => {
   })
 
   return (
-    <>
-      <TableCustom
-        placeholder="Buscar archivo"
-        columns={col}
-        rows={rows || []}
-        actionsList={actions}
-        loading={loading}
-        searchValue={query}
-        onSearch={(value) => {
-          setQuery(value)
-          setPage(1)
-        }}
-        pagination={{
-          page,
-          count: listPublications?.count || 0,
-          rowsPerPage: 10,
-          onChangePage: (page) => setPage(page),
-        }}
-      />
-    </>
+    <TableCustom
+      placeholder="Buscar archivo"
+      columns={col}
+      rows={rows || []}
+      actionsList={actions}
+      loading={loading}
+      disableInputSearch
+      topContent={<TopContent />}
+      pagination={{
+        page,
+        count: listPublications?.count || 0,
+        rowsPerPage: 10,
+        onChangePage: (page) => setPage(page),
+      }}
+    />
   )
 }
 
@@ -128,7 +69,7 @@ const renderColumContent = (content: string) => {
   return (
     <div
       dangerouslySetInnerHTML={renderContent(content)}
-      className="text-justify line-clamp-3 text-sm"
+      className="text-justify line-clamp-3 text-xs font-light max-w-2xl"
     />
   )
 }

@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { IColumns, IRows, TableCustom } from '@/modules/admin'
 import { useStudetsForGroup } from '@/modules/student'
 import { useParams } from 'next/navigation'
+import { IGroupList } from '@/types'
 
 const col: IColumns[] = [
   {
@@ -38,12 +39,18 @@ const col: IColumns[] = [
   },
 ]
 
-export const ClassMateList = () => {
+interface IProps {
+  group?: IGroupList
+}
+
+export const ClassMateList = (props: IProps) => {
   const { groupData, loading, getGroupData } = useStudetsForGroup()
   const { id } = useParams()
+  const { group } = props
+  const teacherPersonId = group?.docente?.persona?.id || ''
 
   useEffect(() => {
-    getGroupData({ group_id: String(id), id_docente: '1' })
+    getGroupData({ group_id: String(id), persona_id: String(teacherPersonId) })
   }, [])
 
   const data: IRows[] = groupData

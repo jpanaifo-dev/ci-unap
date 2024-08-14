@@ -3,15 +3,20 @@ import { useState } from 'react'
 import { Button } from '@nextui-org/button'
 import { useRouter } from 'next/navigation'
 
-import { HeaderSection } from '@/modules/admin'
+import { HeaderSection, LayoutFrmHorizontal } from '@/modules/admin'
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { IGroup } from '@/types'
 import { DialogAction } from '@/components'
 
 //To alert
 import { toast } from 'react-toastify'
-import { FilesData, InfoData, ModuleData, TeacherData } from './sections'
-import { parseDate } from '@internationalized/date'
+import {
+  ActionData,
+  FilesData,
+  InfoData,
+  ModuleData,
+  TeacherData,
+} from './sections'
 
 const isProduction = process.env.NODE_ENV === 'production'
 const urlProd = process.env.API_URL_DEV
@@ -43,18 +48,10 @@ export const FrmGroupEditor = (props: IProps) => {
             defaulData?.docente?.persona?.apellido_materno
           : '',
       },
-      range: {
-        // start: parseDate("2024-05-01"),
-        // end: parseDate("2025-05-08"),
-        start: defaulData?.fecha_inicio
-          ? parseDate(defaulData?.fecha_inicio)
-          : parseDate('2024-05-01'),
-        end: defaulData?.fecha_final
-          ? parseDate(defaulData?.fecha_final)
-          : parseDate('2025-05-08'),
-      },
     },
   })
+
+  const isDirty = methods.formState.isDirty
 
   const onSubmit = () => {
     setOpen(true)
@@ -64,14 +61,8 @@ export const FrmGroupEditor = (props: IProps) => {
     setOpen(false)
     setLoading(true)
 
-    const {
-      range,
-      upLoadSilabo,
-      docente,
-      modulo,
-      uploadAdjuntoResolucion,
-      ...rest
-    } = data
+    const { upLoadSilabo, docente, modulo, uploadAdjuntoResolucion, ...rest } =
+      data
 
     const newData = {
       ...rest,
@@ -79,8 +70,6 @@ export const FrmGroupEditor = (props: IProps) => {
       modulo: modulo?.id,
       silabo: upLoadSilabo?.[0] || [],
       adjunto_resolucion: uploadAdjuntoResolucion?.[0] || [],
-      fecha_inicio: range?.start,
-      fecha_final: range?.end,
     }
 
     const formData = new FormData()
@@ -148,64 +137,71 @@ export const FrmGroupEditor = (props: IProps) => {
     : 'Ingresa los datos del grupo'
 
   return (
-    <>
-      <HeaderSection
-        title={title}
-        subtitle={subtitle}
-      />
-      <FormProvider {...methods}>
-        <form
-          className="flex flex-col gap-4 items-center w-full"
-          onSubmit={methods.handleSubmit(onSubmit)}
-        >
-          <section className="p-4 border flex flex-col gap-4 rounded-xl max-w-4xl w-full ">
-            <header>
-              <p>Datos generales</p>
-            </header>
-            <InfoData />
-          </section>
-          <section className="p-4 border flex flex-col gap-4 rounded-xl max-w-4xl w-full ">
-            <header>
-              <p>Archivos</p>
-            </header>
-            <FilesData />
-          </section>
-          <section className="p-4 border flex flex-col gap-4 rounded-xl max-w-4xl w-full ">
-            <header>
-              <p>Más datos</p>
-            </header>
-            <ModuleData />
-            <TeacherData />
-            {/* Is active section */}
-          </section>
-          <footer className="w-full p-4 max-w-4xl flex gap-2 justify-end">
-            <Button
-              className="button-dark"
-              radius="sm"
-              size="lg"
-              type="submit"
-              isDisabled={loading}
-              isLoading={loading}
+    <main className="w-full flex flex-col justify-center items-center">
+      <section className="w-full section-panel max-w-6xl flex flex-col gap-6">
+        <HeaderSection
+          title={title}
+          subtitle={subtitle}
+        />
+        <FormProvider {...methods}>
+          <form
+            className="flex flex-col gap-4 items-center w-full "
+            onSubmit={methods.handleSubmit(onSubmit)}
+          >
+            <LayoutFrmHorizontal
+              title="Datos generales"
+              subtitle="Ingresa los datos del grupo, aforo, fecha de inicio y fin"
             >
-              {defaulData?.id ? 'Actualizar' : 'Guardar'}
-            </Button>
-            <Button
-              radius="sm"
-              size="lg"
-              onPress={handleExit}
+              <InfoData />
+            </LayoutFrmHorizontal>
+            <LayoutFrmHorizontal
+              title="Archivos"
+              subtitle="Adjunta el silabo y la resolución"
             >
-              Cancelar
-            </Button>
-          </footer>
-        </form>
-      </FormProvider>
-      <DialogAction
-        isOpen={isOpen}
-        setOpen={setOpen}
-        title="Confirmación"
-        message="¿Estás seguro de guardar los cambios?"
-        onPress={methods.handleSubmit(handleFormSubmit)}
-      />
-    </>
+              <FilesData />
+            </LayoutFrmHorizontal>
+            <LayoutFrmHorizontal
+              title="Otros datos"
+              subtitle="Selecciona el módulo y el docente"
+            >
+              <section className="flex flex-col gap-4">
+                <ModuleData />
+                <TeacherData />
+              </section>
+            </LayoutFrmHorizontal>
+            <LayoutFrmHorizontal
+              title="Configuración de privacidad"
+              subtitle="Activa o desactiva el grupo"
+            >
+              <ActionData />
+            </LayoutFrmHorizontal>
+            <footer className="w-full flex gap-2 justify-end pt-4">
+              <Button
+                className="button-dark"
+                radius="sm"
+                type="submit"
+                isDisabled={loading || !isDirty}
+                isLoading={loading}
+              >
+                {defaulData?.id ? 'Actualizar' : 'Guardar'}
+              </Button>
+              <Button
+                radius="sm"
+                onPress={handleExit}
+              >
+                Cancelar
+              </Button>
+            </footer>
+          </form>
+        </FormProvider>
+        <DialogAction
+          isOpen={isOpen}
+          setOpen={setOpen}
+          title="Confirmación"
+          message="¿Estás seguro de guardar los cambios?"
+          onPress={methods.handleSubmit(handleFormSubmit)}
+        />
+      </section>
+    </main>
   )
 }

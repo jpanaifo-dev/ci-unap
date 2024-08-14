@@ -1,10 +1,9 @@
 'use client'
 import { useState } from 'react'
-import { IGroupData, IResCookie } from '@/types'
-import { fetchGestor } from '@/api'
-import { getCookie } from '@/utils'
+import { IGroupData } from '@/types'
 
-const APP_NAME = process.env.APP_NAME || ''
+import { fetchAlumnosGrupo } from '@/api'
+import { getPersonId } from '@/libs'
 
 interface IQuery {
   group_id: string
@@ -17,25 +16,35 @@ export const useStudetsForGroup = () => {
   const getGroupData = async (query: IQuery) => {
     setLoading(true)
     const { group_id } = query
-    const resCookie: IResCookie = (await getCookie(
-      `${APP_NAME}_persona_id`
-    )) as IResCookie
+    const persona_id = await getPersonId()
 
-    const id_persona = resCookie.value
+    try {
+      const res = await fetchAlumnosGrupo({
+        persona_id: persona_id,
+        group_id: group_id,
+      })
 
-    const response = await fetchGestor(
-      `get_alumnos_grupo/?persona_id=${id_persona}&grupo_id=${group_id}`,
-      { method: 'GET' }
-    )
-
-    if (response?.detail) {
-      throw new Error('Error al cargar los grupos')
+      if (res.ok) {
+        const data = await res.json()
+        setGroupData(data)
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error)
     }
-
-    const data: IGroupData = response as IGroupData
-    setGroupData(data)
     setLoading(false)
   }
 
   return { loading, getGroupData, groupData }
 }
+
+// const response = await fetchGestor(
+//   `get_alumnos_grupo/?persona_id=${persona_id}&grupo_id=${group_id}`,
+//   { method: 'GET' }
+// )
+
+// if (response?.detail) {
+//   throw new Error('Error al cargar los grupos')
+// }
+
+// const data: IGroupData = response as IGroupData
+// setGroupData(data)

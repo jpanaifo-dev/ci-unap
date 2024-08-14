@@ -1,3 +1,4 @@
+// Interfaces para integrantes por grupo
 export interface IGroupData {
   docente: IDocente
   modulo: IModulo
@@ -41,4 +42,9 @@ export interface IAlumno {
   nota2: string
   promedio: string
   asistencia?: string
+}
+
+export interface IGroupDataFilter {
+  group_id?: string
+  persona_id?: string
 }

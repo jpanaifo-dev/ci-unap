@@ -12,12 +12,16 @@ export const GroupData = () => {
     control,
     formState: { errors },
     setValue,
+    watch,
   } = useFormContext<IInscriptions>()
 
   const handleSelectProgram = (grupo: any) => {
+    console.log(grupo)
     setValue('grupo', grupo)
     setIsOpen(false)
   }
+
+  const matricula = watch('matricula')
 
   return (
     <>
@@ -40,6 +44,7 @@ export const GroupData = () => {
             isInvalid={errors.grupo !== undefined}
             errorMessage={errors.grupo?.message as string}
             description="Grupo al que pertenecerá el alumno"
+            isDisabled={!matricula}
             endContent={
               <div>
                 <Button

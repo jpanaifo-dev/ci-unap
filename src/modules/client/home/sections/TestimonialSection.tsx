@@ -13,35 +13,10 @@ import { Pagination, Navigation, Autoplay } from 'swiper/modules'
 import { Avatar, Card, CardBody } from '@nextui-org/react'
 import { IResApi, ITestimony } from '@/types'
 import { imgLogoUnap } from '@/assets'
-import { IconStar, IconStarFilled } from '@tabler/icons-react'
+import { RenderStar } from '@/modules/core'
 
 interface IProps {
   listTestimonials: IResApi<ITestimony>
-}
-
-const renderStars = (value: number) => {
-  const totalStars = 5
-  const filledStars = Math.floor(value)
-  const outlinedStars = totalStars - filledStars
-
-  return (
-    <>
-      {[...Array(filledStars)].map((_, index) => (
-        <IconStarFilled
-          key={index}
-          size={14}
-          className="text-warning-500"
-        />
-      ))}
-      {[...Array(outlinedStars)].map((_, index) => (
-        <IconStar
-          key={index}
-          size={14}
-          className="text-gray-400"
-        />
-      ))}
-    </>
-  )
 }
 
 export const TestimonialSection = (props: IProps) => {
@@ -121,9 +96,7 @@ export const TestimonialSection = (props: IProps) => {
                               <p className="text-gray-500 text-xs sm:text-sm">
                                 Mi valoración al CIUNAP es:
                               </p>
-                              <div className="flex items-center gap-1">
-                                {renderStars(testimonial.valoracion)}
-                              </div>
+                              <RenderStar value={testimonial.valoracion} />
                             </footer>
                           </div>
                         </CardBody>

@@ -1,54 +1,35 @@
-import { IPublicationFile } from '@/types'
-import { Input, Textarea } from '@nextui-org/react'
+import { IPublicationList } from '@/types'
+import { Textarea } from '@nextui-org/react'
 import { Controller, useFormContext } from 'react-hook-form'
 
 export const InfoData = () => {
   const {
     control,
     formState: { errors },
-  } = useFormContext<IPublicationFile>()
+  } = useFormContext<IPublicationList>()
 
   return (
     <>
       <Controller
         control={control}
-        name="descripcion"
+        name="titulo"
         rules={{
-          required: 'Este campo es requerido',
+          required: 'Ingrese el título de la publicación',
+          maxLength: {
+            value: 150,
+            message: 'El título debe tener máximo 150 caracteres',
+          },
         }}
         render={({ field: { value, onChange } }) => (
           <Textarea
-            aria-label="Contenido"
-            label="Título o descripción"
-            placeholder="Escriba una descripción de la publicación"
-            labelPlacement="outside"
+            aria-label="titulo"
+            placeholder="Escriba un título para la publicación"
             radius="sm"
             variant="bordered"
-            description="Ingrese el contenido de la publicación o un título descriptivo"
-            value={value}
-            onValueChange={onChange}
-            isInvalid={errors.descripcion !== undefined}
-            errorMessage={errors.descripcion?.message as string}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="link"
-        render={({ field: { value, onChange } }) => (
-          <Input
-            aria-label="link"
-            label="Link de la publicación"
-            placeholder="Ingrese el link de la publicación"
-            labelPlacement="outside"
-            radius="sm"
-            variant="bordered"
-            description="Opccional: Ingrese el link de la publicación"
             value={value || ''}
             onValueChange={onChange}
-            isInvalid={errors.link !== undefined}
-            errorMessage={errors.link?.message as string}
+            isInvalid={errors.titulo !== undefined}
+            errorMessage={errors.titulo?.message as string}
           />
         )}
       />

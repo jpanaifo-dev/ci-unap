@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import { useEffect, useState } from 'react'
-import { IPortalFile } from '@/types'
+import { IPortalFileList } from '@/types'
 import {
   TableCustom,
   IColumns,
@@ -9,6 +9,7 @@ import {
   IActions,
   useFiles,
 } from '@/modules/admin'
+import { Link } from '@nextui-org/react'
 
 const col: IColumns[] = [
   {
@@ -43,10 +44,6 @@ const actions: IActions[] = [
     label: 'Editar',
     href: '',
   },
-  {
-    label: 'Detalles',
-    href: '',
-  },
 ]
 
 export const ListFiles = () => {
@@ -57,17 +54,17 @@ export const ListFiles = () => {
   useEffect(() => {
     getPortalFiles({
       page,
-      name: query,
+      nombre__icontains: query,
     })
   }, [query, page])
 
-  const tiposDocs: IPortalFile[] = listFiles?.results || []
+  const tiposDocs: IPortalFileList[] = listFiles?.results || []
 
   const rows: IRows[] = tiposDocs?.map((item) => {
     return {
       key: item?.id,
       nombre: item?.nombre,
-      archivo: item?.archivo,
+      archivo: renderTowArchivo(item?.archivo),
       tipo: item?.tipo?.nombre,
       actions: 'actions',
     }
@@ -97,7 +94,15 @@ export const ListFiles = () => {
   )
 }
 
-// function renderColLevel(item: string) {
-//   const nameFile = item.split()
-//   return <>{item?.nombre}</>
-// }
+function renderTowArchivo(url: string) {
+  return (
+    <Link
+      href={'' + url}
+      showAnchorIcon
+      target="_blank"
+      className="font-normal"
+    >
+      Ver archivo
+    </Link>
+  )
+}

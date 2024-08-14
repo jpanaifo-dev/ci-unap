@@ -25,6 +25,7 @@ import { IconSearch, IconDots } from '@tabler/icons-react'
 import Link from 'next/link'
 // import { LoadingPages } from '../..'
 import { usePathname } from 'next/navigation'
+import Image from 'next/image'
 
 interface IProps {
   columns: Array<IColumns>
@@ -162,7 +163,8 @@ export const TableCustom = (props: IProps) => {
               aria-label="chip"
               radius="sm"
               size="sm"
-              variant="bordered"
+              variant="flat"
+              color={value ? 'success' : 'danger'}
             >
               {value ? 'Activo' : 'Inactivo'}
             </Chip>
@@ -213,8 +215,15 @@ export const TableCustom = (props: IProps) => {
             'bg-[#F6F6F7]',
             'text-black shadow-none border-[#64748B]',
           ],
-          base: 'max-h-[calc(100vh-22rem)] overflow-y-auto bg-white',
-          td: ['text-xs', 'text-black', 'font-medium'],
+          base: 'max-h-[calc(100vh-22rem)] overflow-y-auto bg-white min-h-[calc(100vh-22rem)] ',
+          td: [
+            'text-xs',
+            'text-black',
+            'font-medium',
+            'whitespace-nowrap',
+            'overflow-hidden',
+            'text-ellipsis',
+          ],
         }}
         selectionMode={selectionMode}
         onRowAction={onRowAction}
@@ -231,7 +240,21 @@ export const TableCustom = (props: IProps) => {
           )}
         </TableHeader>
         <TableBody
-          emptyContent={'No hay datos disponibles'}
+          emptyContent={
+            <div className="flex flex-col items-center justify-center h-full">
+              <section className="flex flex-col items-center pt-6">
+                <Image
+                  alt="No data"
+                  src="/svg/add-item.svg"
+                  width={200}
+                  height={150}
+                />
+                <h1 className="text-sm font-medium">
+                  No hay datos para mostrar, si deseas puedes agregar uno nuevo
+                </h1>
+              </section>
+            </div>
+          }
           items={rows}
           loadingContent={
             <CircularProgress

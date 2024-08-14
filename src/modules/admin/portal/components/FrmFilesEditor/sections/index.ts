@@ -1,6 +1,6 @@
 import { InfoData } from './InfoData'
-import { ActionsData } from './ActionsData'
-import { LevelData } from './LevelData'
+import { TipoData } from './TipoData'
 import { FileData } from './FileData'
+import { PreviewDoc } from './PreviewDoc'
 
-export { InfoData, ActionsData, LevelData, FileData }
+export { InfoData, TipoData, FileData, PreviewDoc }

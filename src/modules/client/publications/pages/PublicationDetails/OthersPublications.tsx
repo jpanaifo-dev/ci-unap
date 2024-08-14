@@ -1,9 +1,9 @@
 import { CardPublicationList } from '@/modules/client'
-import { IPublication, IResApi } from '@/types'
+import { IPublicationList, IResApi } from '@/types'
 import { Divider } from '@nextui-org/react'
 
 interface IProps {
-  publications: IResApi<IPublication>
+  publications: IResApi<IPublicationList>
 }
 export const OthersPublications = (props: IProps) => {
   const { publications } = props

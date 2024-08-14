@@ -3,25 +3,24 @@ import { IGroup } from '@/types'
 import { IconCalendarMonth } from '@tabler/icons-react'
 
 interface IProps {
-  groupData: IGroup
+  groupData?: IGroup
 }
 
 export const CourseRange = (props: IProps) => {
-  const {
-    groupData: { fecha_inicio, fecha_final, grupo },
-  } = props
+  const { groupData } = props
+  const { grupo, fecha_inicio, fecha_final } = groupData || ({} as IGroup)
 
   //sumar 5 dias a la fecha de inicio
   const fechaNotas = new Date(fecha_inicio)
-  fechaNotas.setDate(fechaNotas.getDate() + 5)
+  fechaNotas.setDate(fechaNotas?.getDate() + 5)
 
   //sumar 7 dias a la fecha de inicio
   const fechaActas = new Date(fecha_inicio)
-  fechaActas.setDate(fechaActas.getDate() + 7)
+  fechaActas.setDate(fechaActas?.getDate() + 7)
 
   //sumar 3 dias a la fecha de actas
   const fechaActasFinal = new Date(fechaActas)
-  fechaActasFinal.setDate(fechaActasFinal.getDate() + 3)
+  fechaActasFinal.setDate(fechaActasFinal?.getDate() + 3)
 
   return (
     <>
@@ -55,7 +54,8 @@ export const CourseRange = (props: IProps) => {
             <div>
               <h1 className="text-lg font-bold">Fechas para subir las notas</h1>
               <span className="text-sm">
-                Desde {fecha_inicio} al {fechaNotas.toISOString().split('T')[0]}
+                Desde {fecha_inicio} al{' '}
+                {fechaNotas?.toISOString().split('T')[0]}
               </span>
             </div>
           </div>
@@ -74,8 +74,8 @@ export const CourseRange = (props: IProps) => {
                 Fechas para publicar las actas
               </h1>
               <span className="text-sm">
-                Desde {fechaActas.toISOString().split('T')[0]} al{' '}
-                {fechaActasFinal.toISOString().split('T')[0]}
+                Desde {fechaActas?.toISOString().split('T')[0]} al{' '}
+                {fechaActasFinal?.toISOString().split('T')[0]}
               </span>
             </div>
           </div>

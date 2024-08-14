@@ -9,14 +9,9 @@ import { ListExpedientes } from './ListExpedientes'
 
 export const ExpedienteData = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const {
-    control,
-    setValue,
-    formState: { errors },
-  } = useFormContext<IEnrollment>()
+  const { control, setValue } = useFormContext<IEnrollment>()
 
   const handleSelectExp = (exp: any) => {
-    console.log(exp)
     setValue('expediente', exp)
     setIsOpen(false)
   }
@@ -37,11 +32,11 @@ export const ExpedienteData = () => {
             placeholder="Seleccione un expediente"
             radius="sm"
             variant="bordered"
-            value={value?.expediente}
+            value={value?.expediente || ''}
             onChange={onChange}
             description="Seleccione un expediente para la matricula"
-            isInvalid={errors.expediente !== undefined}
-            errorMessage={errors.expediente?.message as string}
+            isRequired
+            errorMessage="Seleccione un expediente"
             endContent={
               <div>
                 <Button

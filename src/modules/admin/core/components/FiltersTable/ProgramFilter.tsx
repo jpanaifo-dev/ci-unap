@@ -42,7 +42,7 @@ export const ProgramFilter = () => {
       radius="sm"
       onClick={() => getLanguages()}
       isLoading={loading}
-      selectedKeys={[programId] || ['']}
+      selectedKeys={[programId]}
       onSelectionChange={handleProgramChange}
       defaultSelectedKeys={['all']}
       disallowEmptySelection

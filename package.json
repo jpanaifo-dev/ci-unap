@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@nextui-org/button": "^2.0.30",
+   "@nextui-org/button": "^2.0.30",
     "@nextui-org/react": "^2.3.5",
     "@nextui-org/system": "^2.1.2",
     "@nextui-org/theme": "^2.2.2",
@@ -19,7 +19,7 @@
     "filepond-plugin-file-validate-type": "^1.2.9",
     "filepond-plugin-image-preview": "^4.6.12",
     "framer-motion": "^11.1.7",
-    "next": "14.2.2",
+    "next": "^14.2.3",
     "react": "^18",
     "react-dom": "^18",
     "react-filepond": "^7.1.2",

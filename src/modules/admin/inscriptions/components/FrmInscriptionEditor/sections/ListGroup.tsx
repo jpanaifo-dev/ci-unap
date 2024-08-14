@@ -1,14 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
 import { useEffect, useState } from 'react'
-import {
-  TableCustom,
-  IColumns,
-  IRows,
-  useEnrollments,
-  useGroups,
-} from '@/modules/admin'
-import { IGroup, ILanguages, ILevel, IPerson } from '@/types'
+import { TableCustom, IColumns, IRows, useGroups } from '@/modules/admin'
+import { IGroup, IInscriptions } from '@/types'
+import { useFormContext } from 'react-hook-form'
 
 const columns: IColumns[] = [
   {
@@ -27,8 +22,23 @@ const columns: IColumns[] = [
     align: 'center',
   },
   {
-    key: 'docente',
+    key: 'teacher',
     label: 'Docente',
+    align: 'center',
+  },
+  {
+    key: 'fecha_inicio',
+    label: 'Fecha Inicio',
+    align: 'center',
+  },
+  {
+    key: 'fecha_final',
+    label: 'Fecha Fin',
+    align: 'center',
+  },
+  {
+    key: 'resolucion',
+    label: 'N° de Resolución',
     align: 'center',
   },
 ]
@@ -40,16 +50,23 @@ interface IProps {
 export const ListGroup = (props: IProps) => {
   const [query, setQuery] = useState('')
   const [page, setPage] = useState(1)
+  const { watch } = useFormContext<IInscriptions>()
 
   const { onSelectProgram } = props
   const { getGroups, listGroups, loading } = useGroups()
 
+  const matricula = watch('matricula')
+  const nivel = matricula?.nivel
+
   useEffect(() => {
-    getGroups({
-      page,
-      name_modulo: query,
-    })
-  }, [query, page])
+    if (matricula) {
+      getGroups({
+        page,
+        name_modulo: query,
+        nivel_id: nivel?.id,
+      })
+    }
+  }, [query, page, matricula])
 
   const dataList: IGroup[] = listGroups?.results ?? []
 
@@ -59,12 +76,18 @@ export const ListGroup = (props: IProps) => {
       id: item.id,
       grupo: 'Grupo ' + item?.grupo,
       curso: item?.modulo?.nombre,
-      docente:
+      fecha_inicio: item?.fecha_inicio,
+      fecha_final: item?.fecha_final,
+      resolucion: item?.resolucion,
+      modulo: item?.modulo,
+      aforo: item?.aforo,
+      teacher:
         item?.docente?.persona?.nombres +
         ' ' +
         item?.docente?.persona?.apellido_paterno +
         ' ' +
         item?.docente?.persona?.apellido_materno,
+      docente: item?.docente,
     }
   })
 
@@ -88,34 +111,4 @@ export const ListGroup = (props: IProps) => {
       />
     </>
   )
-}
-
-function renderColPerson(item: IPerson) {
-  return (
-    <>
-      <div>
-        <h2>
-          {item?.nombres} {item?.apellido_paterno} {item?.apellido_materno}
-        </h2>
-        <p className="text-xs text-gray-500">
-          {item?.tipo_documento?.documento}: {item?.numero_documento}
-        </p>
-      </div>
-    </>
-  )
-}
-
-function renderColProgram(item: ILanguages) {
-  return (
-    <>
-      {item?.codigo} - {item?.nombre}
-    </>
-  )
-}
-
-function renderColLevel(item: ILevel | string) {
-  if (typeof item === 'string') {
-    return <>{item}</>
-  }
-  return <>{item?.nombre}</>
 }

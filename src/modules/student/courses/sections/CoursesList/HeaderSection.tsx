@@ -11,7 +11,7 @@ export const HeaderSection = () => {
   const { getProceedings, proceedings, loading } = useStudentsProceeding()
 
   useEffect(() => {
-    getProceedings({ is_active: '', name_program: '' })
+    getProceedings({})
   }, [])
 
   const dataList = proceedings?.results || []

@@ -30,7 +30,7 @@ export default async function Page(props: IProps) {
   return (
     <>
       <main className="flex flex-col items-center gap-6">
-        <section className="w-full max-w-6xl border p-6 rounded-xl flex flex-col gap-6">
+        <section className="w-full max-w-6xl border p-6 rounded-xl flex flex-col gap-6 section-panel">
           <HeaderSection
             title={`Detalles del expediente N°` + ` ${dataExp.results[0].id}`}
             subtitle="Detalles del expediente."

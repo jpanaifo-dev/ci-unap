@@ -68,7 +68,7 @@ export const LayoutCourseModal = ({
           </ModalHeader>
           <Divider />
           <ModalBody>
-            <main className="flex gap-2">
+            <main className="flex gap-2 h-full">
               <aside className="hidden lg:block max-w-sm w-full border-r py-2">
                 <CourseDetails dataGroup={dataGroup} />
               </aside>

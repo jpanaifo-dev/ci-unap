@@ -52,13 +52,13 @@ export async function generateMetadata({ params }: IProps): Promise<Metadata> {
       description: 'Conoce está publicación de CIUNAP',
       type: 'website',
       locale: 'es_ES',
-      url: `https://www.ciunap.edu.ec/publicaciones/${publicacion.results[0].tipo.nombre}/${id}`,
+      // url: `https://www.ciunap.edu.ec/publicaciones/${publicacion.results[0].tipo.nombre}/${id}`,
       images: [`${publicationFiles.results[0].archivo ?? ''}`],
     }
   }
 
   return {
-    title: `${publicacion.results[0].tipo.nombre} | ${publicacion.results[0].titulo}`,
+    // title: `${publicacion.results[0].tipo.nombre} | ${publicacion.results[0].titulo}`,
     description: 'Conoce está publicación de CIUNAP',
     openGraph: openGraph,
   }
@@ -96,10 +96,10 @@ export default async function Page(props: IProps) {
 
   return (
     <>
-      <PublicationDetails
+      {/* <PublicationDetails
         publication={publication.results[0]}
         publicationFiles={publicacionFiles}
-      />
+      /> */}
     </>
   )
 }

@@ -5,6 +5,7 @@ import { Input } from '@nextui-org/react'
 import { IconSearch } from '@tabler/icons-react'
 import { useFilterFromUrl } from '@/hooks'
 import { Suspense } from 'react'
+import Image from 'next/image'
 
 interface IProps {
   publications: IResApi<IPublicationFile>
@@ -67,10 +68,16 @@ export const PublicationsList = (props: IProps) => {
               )}
             </section>
             {publications?.results?.length === 0 && (
-              <section className="h-screen max-h-48 flex flex-col items-center justify-center">
-                <div className="h-full flex flex-col justify-center">
-                  <h1 className="font-bold text-xl">
-                    😪 No se encontraron publicaciones
+              <section className="flex flex-col items-center justify-center">
+                <div className="h-full flex flex-col justify-center items-center">
+                  <Image
+                    src="/svg/not-data.svg"
+                    alt="No se encontraron publicaciones"
+                    width={320}
+                    height={320}
+                  />
+                  <h1 className="font-bold text-sm">
+                    No se encontraron publicaciones
                   </h1>
                 </div>
               </section>

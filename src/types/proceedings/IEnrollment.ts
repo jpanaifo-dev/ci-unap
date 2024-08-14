@@ -7,6 +7,6 @@ export interface IEnrollment {
   fecha: string
   is_active: boolean
   is_retired: boolean
-  nivel: ILevel | string
+  nivel: ILevel
   expediente: IProceeding
 }

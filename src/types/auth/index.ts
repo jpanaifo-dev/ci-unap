@@ -5,6 +5,7 @@ import { IAuthUser } from './IAuthUser'
 import { IResCookie } from './IResCookie'
 import { Role } from './typeRole'
 import { IChangePassword } from './ICredentials'
+import { IUserData } from './IUserData'
 
 export type {
   ICredentials,
@@ -14,4 +15,5 @@ export type {
   IResCookie,
   Role,
   IChangePassword,
+  IUserData,
 }

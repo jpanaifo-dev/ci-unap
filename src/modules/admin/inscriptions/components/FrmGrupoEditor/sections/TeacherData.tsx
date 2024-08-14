@@ -38,8 +38,8 @@ export const TeacherData = () => {
             variant="bordered"
             value={value?.full_name ?? ''}
             onValueChange={onChange}
-            isInvalid={errors.docente?.full_name !== undefined}
-            errorMessage={errors.docente?.message as string}
+            isRequired
+            errorMessage="Seleccione un profesor"
             endContent={
               <div>
                 <Button

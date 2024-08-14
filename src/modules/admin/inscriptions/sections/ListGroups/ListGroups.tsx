@@ -69,13 +69,10 @@ const RenderColumDocente = (item: ITeach) => {
   return (
     <>
       <div className="flex flex-col gap-1">
-        <p className="text-tiny text-gray-500">{item?.grado_academico}</p>
-        <div>
-          <h3 className="uppercase font-bold text-gray-500">
-            {item?.persona?.nombres} {item?.persona?.apellido_paterno}{' '}
-            {item?.persona?.apellido_materno}
-          </h3>
-        </div>
+        <h3 className="uppercase font-bold text-gray-500">
+          {item?.persona?.nombres} {item?.persona?.apellido_paterno}{' '}
+          {item?.persona?.apellido_materno}
+        </h3>
       </div>
     </>
   )

@@ -11,6 +11,7 @@ export const useLevels = () => {
     previous: string | null
     results: ILevel[]
   } | null>(null)
+
   const getLevels = async () => {
     setLoading(true)
     const response = await fetchGestor('Nivel/', { method: 'GET' })

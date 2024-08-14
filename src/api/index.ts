@@ -1,4 +1,3 @@
-import { fetchCore } from './fetchCore'
-import { fetchGestor } from './fetchGestor'
-
-export { fetchCore, fetchGestor }
+export * from './core'
+export * from './portal'
+export * from './gestor'

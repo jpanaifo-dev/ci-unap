@@ -12,7 +12,7 @@ const columns: IColumns[] = [
   },
   {
     key: 'fecha',
-    label: 'Fecha',
+    label: 'Fecha de matrícula',
     align: 'center',
   },
   {
@@ -26,7 +26,7 @@ const columns: IColumns[] = [
     align: 'center',
   },
   {
-    key: 'nivel',
+    key: 'level',
     label: 'Nivel',
     align: 'center',
   },
@@ -64,12 +64,13 @@ export const ListMatricula = (props: IProps) => {
       id: item.id,
       fecha: item?.fecha,
       alumn: renderColPerson(item?.expediente?.persona),
-      expediente: item?.expediente,
       program: renderColProgram(item?.expediente?.programa),
       programa: item?.expediente?.programa
         ? item?.expediente?.programa?.nombre
         : '',
-      nivel: renderColLevel(item?.nivel),
+      level: renderColLevel(item?.nivel),
+      nivel: item?.nivel,
+      expediente: item?.expediente,
       status: item?.is_active
         ? 'Activo'
         : item?.is_retired

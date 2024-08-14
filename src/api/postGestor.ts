@@ -1,7 +1,7 @@
-import { fetchCore } from "./fetchCore"
+import { fetchCore } from '@/api'
 
 export async function postGestor(
-    path: string,
+  path: string,
   options: RequestInit,
   nextConfig?: { [key: string]: any }
 ) {

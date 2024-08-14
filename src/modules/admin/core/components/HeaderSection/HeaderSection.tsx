@@ -20,8 +20,8 @@ export const HeaderSection = (props: IProps) => {
       <section className="flex flex-col gap-3">
         <header className="flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold">{title}</h1>
-            <p className="text-sm text-gray-500">{subtitle}</p>
+            <h1 className="title-section">{title}</h1>
+            <p className="description-section">{subtitle}</p>
           </div>
           <div className="flex gap-2 justify-end">
             {rigthContent}

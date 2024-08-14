@@ -5,10 +5,10 @@ import {
   TableCustom,
   IColumns,
   IRows,
-  usePublicationsTypes,
+  usePublicationsFilesTypes,
 } from '@/modules/admin'
 
-import { IPublicationType } from '@/types'
+import { IPublicationFileType } from '@/types'
 
 const columns: IColumns[] = [
   {
@@ -18,7 +18,7 @@ const columns: IColumns[] = [
   },
   {
     key: 'nombre',
-    label: 'Tipo de publicación',
+    label: 'Tipo de archivo',
     align: 'center',
   },
 ]
@@ -31,17 +31,18 @@ export const ListPublicationsType = (props: IProps) => {
   const [query, setQuery] = useState('')
 
   const { onSelectValue } = props
-  const { getPublicationsTypes, listPublicationsType, loading } =
-    usePublicationsTypes()
+  const { getPublicationsFilesTypes, listPublicationsFileType, loading } =
+    usePublicationsFilesTypes()
 
   useEffect(() => {
-    getPublicationsTypes({
+    getPublicationsFilesTypes({
       page: 1,
-      name: query,
+      nombre__icontains: query,
     })
   }, [])
 
-  const dataList: IPublicationType[] = listPublicationsType?.results ?? []
+  const dataList: IPublicationFileType[] =
+    listPublicationsFileType?.results ?? []
 
   const rows: IRows[] = dataList.map((item) => {
     return {
@@ -62,6 +63,7 @@ export const ListPublicationsType = (props: IProps) => {
         onSelectionChange={(selectedRow) => {
           onSelectValue(selectedRow)
         }}
+        loading={loading}
       />
     </>
   )

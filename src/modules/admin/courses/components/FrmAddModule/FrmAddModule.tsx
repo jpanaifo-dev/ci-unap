@@ -1,5 +1,5 @@
 'use client'
-import { Button } from '@nextui-org/react'
+import { Button, modal } from '@nextui-org/react'
 // To fetch action
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
 import { useRouter } from 'next/navigation'
@@ -13,6 +13,7 @@ import { fetchCore } from '@/api'
 //To alert
 import { toast } from 'react-toastify'
 import { HeaderSection } from '@/modules/admin/core'
+import { ProgramData } from './sections/ProgramData'
 
 interface IProps {
   data?: IModule
@@ -25,7 +26,10 @@ export const FrmAddModule = (props: IProps) => {
 
   const router = useRouter()
   const methods = useForm<IModule>({
-    defaultValues: data,
+    defaultValues: {
+      ...data,
+      programa: data ? data?.modalidad?.programa : {},
+    },
   })
 
   const onSubmit = () => {
@@ -35,10 +39,18 @@ export const FrmAddModule = (props: IProps) => {
   const handleFormSubmit: SubmitHandler<IModule> = async (data: IModule) => {
     setOpen(false)
     setLoading(true)
+
+    const { programa, ...res } = data
+    const dataBody = {
+      ...res,
+      nivel: data.nivel.id,
+      modalidad: data.modalidad.id,
+    }
+
     if (data.id) {
       const res = await fetchCore(`gestor/Modulo/${data.id}/`, {
         method: 'PUT',
-        body: JSON.stringify(data),
+        body: JSON.stringify(dataBody),
       })
         .then((res) => res)
         .catch((err) => err)
@@ -51,7 +63,7 @@ export const FrmAddModule = (props: IProps) => {
     } else {
       const res = await fetchCore('gestor/Modulo/', {
         method: 'POST',
-        body: JSON.stringify(data),
+        body: JSON.stringify(dataBody),
       })
         .then((res) => res)
         .catch((err) => err)
@@ -78,16 +90,17 @@ export const FrmAddModule = (props: IProps) => {
     : 'Agrega un nuevo curso al sistema.'
 
   return (
-    <main className="flex flex-col gap-5">
+    <main className="flex flex-col gap-5 w-full section-panel max-w-xl ">
       <HeaderSection
         title={title}
         subtitle={subtitle}
       />
       <FormProvider {...methods}>
         <form
-          className="max-w-xl flex flex-col gap-6"
+          className="flex flex-col gap-5 w-full"
           onSubmit={methods.handleSubmit(onSubmit)}
         >
+          <ProgramData />
           <InfoData />
           <LevelData />
           <ModalityData />

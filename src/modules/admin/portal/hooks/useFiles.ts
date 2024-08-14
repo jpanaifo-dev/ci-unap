@@ -1,30 +1,25 @@
 'use client'
 import { useState } from 'react'
-import { IPortalFile, IResApi } from '@/types'
-import { fetchCore } from '@/api'
-
-interface IQuery {
-  page?: number
-  name?: string
-}
+import { fetchFileList } from '@/api'
+import { IPortalFileFilter, IPortalFileList, IResApi } from '@/types'
 
 export const useFiles = () => {
   const [loading, setLoading] = useState<boolean>(false)
-  const [listFiles, setListFiles] = useState<IResApi<IPortalFile> | null>(null)
+  const [listFiles, setListFiles] = useState<IResApi<IPortalFileList> | null>(
+    null
+  )
 
-  const getPortalFiles = async (query: IQuery) => {
+  const getPortalFiles = async (filter: IPortalFileFilter) => {
     setLoading(true)
-    const { page, name } = query
 
-    const path = `portal/FileList/?page=${page}&nombre__icontains=${name}`
-    const response = await fetchCore(path, { method: 'GET' })
+    const response = await fetchFileList(filter)
 
     if (!response?.ok) {
       throw new Error('Error al cargar los archivos')
     }
 
-    const data: IResApi<IPortalFile> =
-      (await response.json()) as IResApi<IPortalFile>
+    const data: IResApi<IPortalFileList> =
+      (await response.json()) as IResApi<IPortalFileList>
 
     setListFiles(data)
     setLoading(false)

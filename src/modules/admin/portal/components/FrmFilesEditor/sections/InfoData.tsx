@@ -27,8 +27,8 @@ export const InfoData = () => {
             variant="bordered"
             value={value}
             onChange={onChange}
-            isInvalid={errors.tipo !== undefined}
-            errorMessage={errors.tipo?.message as string}
+            isInvalid={errors.nombre !== undefined}
+            errorMessage={errors.nombre?.message as string}
           />
         )}
       />

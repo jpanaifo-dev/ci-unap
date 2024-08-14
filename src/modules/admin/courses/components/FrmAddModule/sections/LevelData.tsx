@@ -2,7 +2,7 @@
 'use client'
 import { ILevel, IModule } from '@/types'
 import { useFormContext, Controller } from 'react-hook-form'
-import { Select, SelectItem } from '@nextui-org/react'
+import { Select, SelectItem, Selection } from '@nextui-org/react'
 
 import { useLevels } from '@/modules/admin'
 import { useEffect } from 'react'
@@ -37,8 +37,12 @@ export const LevelData = () => {
             placeholder="Seleccione un nivel"
             radius="sm"
             variant="bordered"
-            selectedKeys={[String(value)] || ['']}
-            onChange={onChange}
+            selectedKeys={value ? [value?.id?.toString()] : ['']}
+            onSelectionChange={(e: Selection) => {
+              const value = Object.values(e)[0]
+              const item = dataList.find((item) => item.id === Number(value))
+              onChange(item)
+            }}
             isInvalid={errors.nivel !== undefined}
             errorMessage={errors.nivel?.message as string}
             isLoading={loading}
@@ -46,7 +50,7 @@ export const LevelData = () => {
             {dataList.map((item) => (
               <SelectItem
                 aria-label="level-item"
-                key={item.id}
+                key={item.id.toString()}
                 value={String(item.id)}
               >
                 {item.nombre}

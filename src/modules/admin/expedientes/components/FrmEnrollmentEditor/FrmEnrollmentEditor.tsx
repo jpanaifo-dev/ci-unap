@@ -9,6 +9,7 @@ import { ActionsData, ExpedienteData, InfoData, LevelData } from './sections'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 import { fetchCore } from '@/api'
+import { HeaderSection } from '@/modules/admin/core'
 interface IProps {
   data?: IEnrollment
 }
@@ -25,11 +26,19 @@ export const FrmEnrollmentEditor = (props: IProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
+  const expediente = `Exp. ${defaulData?.expediente?.id} - ${defaulData?.expediente?.persona?.nombres} ${defaulData?.expediente?.persona?.apellido_paterno} ${defaulData?.expediente?.persona?.apellido_materno} - ${defaulData?.expediente?.programa?.nombre}`
+
   const methods = useForm<IEnrollment>({
     defaultValues: {
-      expediente: defaulData?.expediente,
+      id: defaulData?.id,
+      expediente: defaulData
+        ? {
+            ...defaulData.expediente,
+            expediente,
+          }
+        : {},
       fecha: converToDate(defaulData?.fecha),
-      nivel: String(defaulData?.id),
+      nivel: defaulData?.nivel,
       is_active: defaulData?.is_active,
       is_retired: defaulData?.is_retired,
     },
@@ -50,6 +59,7 @@ export const FrmEnrollmentEditor = (props: IProps) => {
       ...data,
       fecha: data.fecha,
       expediente: Number(data.expediente?.id),
+      nivel: Number(data.nivel?.id),
     }
 
     if (defaulData && defaulData?.id) {
@@ -86,8 +96,17 @@ export const FrmEnrollmentEditor = (props: IProps) => {
     router.push('/admin/expedientes/matriculas')
   }
 
+  const title = defaulData?.id ? 'Editar matricula' : 'Crear matricula'
+  const subtitle = defaulData?.id
+    ? 'Editar matricula'
+    : 'Crear una nueva matricula'
+
   return (
-    <>
+    <section className="section-panel w-full flex flex-col gap-4">
+      <HeaderSection
+        title={title}
+        subtitle={subtitle}
+      />
       <FormProvider {...methods}>
         <form
           className="flex flex-col gap-6"
@@ -124,6 +143,6 @@ export const FrmEnrollmentEditor = (props: IProps) => {
         message="¿Está seguro de realizar esta acción?"
         onPress={() => handleFormSubmit(methods.getValues())}
       />
-    </>
+    </section>
   )
 }

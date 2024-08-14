@@ -45,14 +45,8 @@ export const FrmUploadSilabo = (props: IProps) => {
 
   const onSubmit: SubmitHandler<IGroup> = async (data) => {
     setLoading(true)
-    const {
-      range,
-      upLoadSilabo,
-      docente,
-      modulo,
-      uploadAdjuntoResolucion,
-      ...rest
-    } = data
+    const { upLoadSilabo, docente, modulo, uploadAdjuntoResolucion, ...rest } =
+      data
 
     if (defaulData && upLoadSilabo) {
       const newData = {

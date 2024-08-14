@@ -24,7 +24,7 @@ export const InfoData = () => {
             labelPlacement="outside"
             radius="sm"
             variant="bordered"
-            value={value}
+            value={value || ''}
             onValueChange={onChange}
             isInvalid={errors.nombre !== undefined}
             errorMessage={errors.nombre?.message as string}

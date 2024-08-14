@@ -14,7 +14,7 @@ import imgBecaSchool from './becaSchool.webp'
 import imgBecaUniversity from './becaUniversity.webp'
 import imgCiusaurio from './ciusaurio.webp'
 import imgBannerFile from './bannerFile.webp'
-
+import imgLogoBg from './logo-bg.webp'
 export {
   logoCiunap,
   imgServicesStuden,
@@ -32,4 +32,5 @@ export {
   imgBecaUniversity,
   imgCiusaurio,
   imgBannerFile,
+  imgLogoBg,
 }

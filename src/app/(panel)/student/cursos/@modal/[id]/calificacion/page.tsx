@@ -1,7 +1,6 @@
 import { CourseScore } from '@/modules/student'
-import { fetchCore } from '@/api'
 import { IResApi, IInscriptions } from '@/types'
-
+import { fetchInscripcionList } from '@/api'
 interface IProps {
   params: {
     id: string
@@ -11,22 +10,26 @@ interface IProps {
 export default async function Page(props: IProps) {
   const { id } = props.params
 
-  const response = await fetchCore(
-    `gestor/InscripcionList/?matricula__expediente__id=&grupo__modulo__id=&grupo__modulo__nivel__id=&matricula__expediente__persona__numero_documento__icontains=&id=${id}&grupo__modulo__nombre__icontains=&grupo__id=/`,
-    {
-      method: 'GET',
-    }
-  )
-
-  if (response.status !== 200) {
-    return <div>Error</div>
+  let dataInscriptions: IResApi<IInscriptions> = {
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
   }
 
-  const inscriptions: IResApi<IInscriptions> = await response.json()
+  try {
+    const response = await fetchInscripcionList({
+      id: Number(id),
+    })
 
-  return (
-    <>
-      <CourseScore dataInscriptions={inscriptions.results[0]} />
-    </>
-  )
+    if (response.status !== 200) {
+      return <div>Error</div>
+    } else {
+      dataInscriptions = await response.json()
+    }
+  } catch (error) {
+    console.error('Error al obtener la data de inscripciones', error)
+  }
+
+  return <CourseScore dataInscriptions={dataInscriptions.results[0]} />
 }

@@ -1,66 +1,58 @@
 'use client'
-import { useState } from 'react'
-import { DrawerCustom } from '@/modules/admin'
-import { IPayments, IPublicationFile } from '@/types'
-import { Button, Input } from '@nextui-org/react'
-import { IconLink } from '@tabler/icons-react'
-import { useFormContext, Controller } from 'react-hook-form'
-import { ContentList } from './ContentList'
+import { IPublicationList } from '@/types'
+import { Controller, useFormContext } from 'react-hook-form'
+import { Skeleton } from '@nextui-org/react'
+import dynamic from 'next/dynamic'
+
+//For the text field
+const ReactQuill = dynamic(() => import('react-quill'), {
+  ssr: false,
+  loading: () => (
+    <div>
+      <Skeleton className="w-full h-52 rounded-lg" />
+    </div>
+  ),
+})
+// import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css'
 
 export const ContentData = () => {
-  const [isOpen, setIsOpen] = useState(false)
   const {
     control,
-    setValue,
     formState: { errors },
-  } = useFormContext<IPublicationFile>()
-
-  const handleSelectValue = (value: any) => {
-    setValue('publicacion', value)
-    setIsOpen(false)
-  }
+  } = useFormContext<IPublicationList>()
 
   return (
     <>
-      <Controller
-        control={control}
-        name="publicacion"
-        rules={{
-          required: 'Seleccione un contenido para la publicación',
-        }}
-        render={({ field: { value, onChange } }) => (
-          <Input
-            aria-label="publicacion"
-            label="Contenido de la publicación"
-            labelPlacement="outside"
-            placeholder="Seleccione un contenido para la publicación"
-            radius="sm"
-            variant="bordered"
-            value={value?.id as unknown as string}
-            onChange={onChange}
-            isInvalid={errors.publicacion !== undefined}
-            errorMessage={errors.publicacion?.message as string}
-            endContent={
-              <div>
-                <Button
-                  size="sm"
-                  radius="sm"
-                  startContent={<IconLink size={16} />}
-                  onPress={() => setIsOpen(true)}
-                >
-                  Seleccionar
-                </Button>
-              </div>
-            }
-          />
-        )}
-      />
-      <DrawerCustom
-        isOpen={isOpen}
-        setOpen={setIsOpen}
-        title="Seleccionar contenido"
-        content={<ContentList onSelectValue={handleSelectValue} />}
-      />
+      {/* Your content goes here */}
+      <section className="pb-14">
+        {/* the className is used to define css variables necessary for the editor */}
+        <Controller
+          control={control}
+          name="contenido"
+          rules={{
+            required: 'Ingrese el contenido de la publicación',
+          }}
+          render={({ field: { value, onChange } }) => (
+            <ReactQuill
+              value={value}
+              onChange={onChange}
+              theme="snow"
+              className="h-52 rounded-lg"
+            />
+          )}
+        />
+        <label
+          htmlFor="contenido"
+          className="text-sm"
+        >
+          {errors.contenido !== undefined && (
+            <span className="text-danger-500 ml-1">
+              {errors.contenido.message}
+            </span>
+          )}
+        </label>
+      </section>
     </>
   )
 }

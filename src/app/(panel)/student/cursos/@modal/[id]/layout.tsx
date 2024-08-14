@@ -1,4 +1,4 @@
-import { fetchCore } from '@/api'
+import { fetchGrupoList } from '@/api'
 import { LayoutCourseModal } from '@/modules/student'
 import { IGroup, IResApi } from '@/types'
 
@@ -13,25 +13,26 @@ export default async function Layout(props: IProps) {
   const { params, children } = props
   const { id } = params
 
-  const response = await fetchCore(`gestor/GrupoList/?id=${id}`, {
-    method: 'GET',
-    next: { tags: ['student', 'courses', 'modal', 'layout'] },
-  })
-
-  if (!response.ok) {
-    return (
-      <>
-        <h1 className="text-3xl font bold">Error</h1>
-      </>
-    )
+  let data: IResApi<IGroup> = {
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
   }
 
-  const data: IResApi<IGroup> = (await response.json()) as IResApi<IGroup>
+  try {
+    const res = await fetchGrupoList({ id: parseInt(id) })
+
+    if (res.ok) {
+      data = await res.json()
+    }
+  } catch (error) {
+    console.error('Error:', error)
+  }
+
   return (
-    <>
-      <LayoutCourseModal dataGroup={data?.results[0]}>
-        {children}
-      </LayoutCourseModal>
-    </>
+    <LayoutCourseModal dataGroup={data?.results[0]}>
+      {children}
+    </LayoutCourseModal>
   )
 }

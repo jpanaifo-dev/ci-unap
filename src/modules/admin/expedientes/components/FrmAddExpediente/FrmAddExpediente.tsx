@@ -9,6 +9,7 @@ import { fetchGestor } from '@/api'
 
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
+import { HeaderSection } from '@/modules/admin/core'
 
 interface IProps {
   data?: IProceeding
@@ -23,6 +24,7 @@ export const FrmAddExpediente = (props: IProps) => {
     defaultValues: defaulData,
   })
   const router = useRouter()
+  const isDirty = methods.formState.isDirty
 
   const onSubmit = () => {
     setIsOpen(true)
@@ -75,39 +77,46 @@ export const FrmAddExpediente = (props: IProps) => {
     methods.reset()
   }
 
+  const title = defaulData?.id ? 'Editar expediente' : 'Nuevo expediente'
+  const subtitle = defaulData?.id
+    ? 'Complete los campos para editar el expediente'
+    : 'Complete los campos para agregar un nuevo expediente'
+
   return (
     <>
-      <main className="w-full flex flex-col items-center pt-4">
-        <FormProvider {...methods}>
-          <form
-            className="flex flex-col gap-6 max-w-xl w-full border rounded-lg p-6"
-            onSubmit={methods.handleSubmit(onSubmit)}
-          >
-            <ProgramData />
-            <PersonData />
-            <DiscountData />
-            <ActionsData />
-            <footer className="flex items-center gap-3 justify-end">
-              <Button
-                className="button-dark"
-                radius="sm"
-                type="submit"
-                isLoading={loading}
-                isDisabled={loading}
-              >
-                {defaulData?.id ? 'Actualizar' : 'Crear'}
-              </Button>
+      <FormProvider {...methods}>
+        <form
+          className="flex flex-col gap-6 max-w-2xl w-full section-panel"
+          onSubmit={methods.handleSubmit(onSubmit)}
+        >
+          <HeaderSection
+            title={title}
+            subtitle={subtitle}
+          />
+          <ProgramData />
+          <PersonData />
+          <DiscountData />
+          <ActionsData />
+          <footer className="flex items-center gap-3 justify-end">
+            <Button
+              className="button-dark"
+              radius="sm"
+              type="submit"
+              isLoading={loading}
+              isDisabled={loading || !isDirty}
+            >
+              {defaulData?.id ? 'Actualizar' : 'Crear'}
+            </Button>
 
-              <Button
-                radius="sm"
-                onPress={handleCancel}
-              >
-                Cancelar
-              </Button>
-            </footer>
-          </form>
-        </FormProvider>
-      </main>
+            <Button
+              radius="sm"
+              onPress={handleCancel}
+            >
+              Cancelar
+            </Button>
+          </footer>
+        </form>
+      </FormProvider>
       <DialogAction
         isOpen={isOpen}
         setOpen={setIsOpen}

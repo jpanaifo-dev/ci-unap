@@ -1,0 +1,14 @@
+{
+  "tipo": "portal/tipo/",
+  "File": "portal/File/",
+  "FileList": "portal/FileList/",
+  "PublicacionTipo": "portal/PublicacionTipo/",
+  "Publicacion": "portal/Publicacion/",
+  "PublicacionList": "portal/PublicacionList/",
+  "PublicacionTipoFile": "portal/PublicacionTipoFile/",
+  "PublicacionFile": "portal/PublicacionFile/",
+  "PublicacionFileList": "portal/PublicacionFileList/",
+  "PublicacionTipoList": "portal/PublicacionTipoList/",
+  "Testimonio": "portal/Testimonio/",
+  "TestimonioList": "portal/TestimonioList/"
+}

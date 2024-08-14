@@ -1,11 +1,8 @@
-import { Suspense } from 'react'
-import { fetchGestor } from '@/api'
 import { HeaderSection } from '@/modules/admin'
 import { RightContentHeader, TeacherCoursesList } from '@/modules/teacher'
-import { IGroup, IResApi, IResCookie } from '@/types'
-import { getCookie } from '@/utils'
-
-const APP_NAME = process.env.APP_NAME || ''
+import { IGroup, IResApi } from '@/types'
+import { fetchGrupoList } from '@/api'
+import { getPersonId } from '@/libs'
 
 interface IProps {
   searchParams: {
@@ -18,49 +15,45 @@ export default async function page(props: IProps) {
     searchParams: { search, status, page },
   } = props
 
-  const is_active = !status ? 'true' : status === '0' ? 'false' : ''
-
-  const res: IResCookie = (await getCookie(
-    `${APP_NAME}_persona_id`
-  )) as IResCookie
-
-  const id_persona = res.value
-  const query = search || ''
-  const currentPage = page || '1'
-
-  const response = await fetchGestor(
-    `GrupoList/?docente__persona__id=${id_persona}&docente_id=&is_active=${is_active}&modulo__nombre__icontains=${query}&page=${currentPage}`,
-    { method: 'GET', cache: 'no-cache' }
-  )
-
-  if (response?.detail) {
-    return (
-      <>
-        <HeaderSection
-          title="Cursos y grupos asignados"
-          subtitle="Lista de cursos asignados al docente"
-        />
-        <main className="flex flex-col gap-3">
-          <div>
-            <h1 className="text-lg font-bold">Error al cargar los cursos</h1>
-          </div>
-        </main>
-      </>
-    )
+  let data: IResApi<IGroup> = {
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
   }
 
-  const data = response as IResApi<IGroup>
+  const personTeacherId = await getPersonId()
+
+  try {
+    const res = await fetchGrupoList({
+      docente__persona__id: personTeacherId,
+      is_active:
+        status === '1'
+          ? true
+          : status === '0'
+          ? false
+          : status === '3'
+          ? undefined
+          : true,
+      page: page ? Number(page) : undefined,
+      modulo__nombre__icontains: search ? String(search) : undefined,
+    })
+
+    if (res.ok) {
+      data = (await res.json()) as IResApi<IGroup>
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error)
+  }
 
   return (
-    <main className="flex flex-col gap-5">
+    <main className="flex flex-col gap-5 section-panel">
       <HeaderSection
         title="Cursos y grupos asignados"
         subtitle="Lista de cursos asignados al docente"
         rigthContent={<RightContentHeader path="teacher" />}
       />
-      <Suspense fallback={<div>Loading...</div>}>
-        <TeacherCoursesList groupList={data} />
-      </Suspense>
+      <TeacherCoursesList groupList={data} />
     </main>
   )
 }

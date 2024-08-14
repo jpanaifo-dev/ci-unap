@@ -20,7 +20,7 @@ import {
   useForm,
 } from 'react-hook-form'
 import { DialogAction } from '@/components'
-import { fetchCore } from '@/api'
+import { postOrUpdateTipo } from '@/api'
 
 //To alert
 import { toast } from 'react-toastify'
@@ -49,10 +49,7 @@ export const FrmFilesTypeEditor = (props: IProps) => {
   ) => {
     setLoading(true)
     setOpen(false)
-    const endpoint = dataDeafult?.id
-      ? `portal/tipo/${data.id}/`
-      : 'portal/tipo/'
-    const method = dataDeafult?.id ? 'PUT' : 'POST'
+
     const successMessage = dataDeafult?.id
       ? 'Tipo de archivo actualizado correctamente'
       : 'Tipo de archivo creado correctamente'
@@ -60,18 +57,17 @@ export const FrmFilesTypeEditor = (props: IProps) => {
       ? 'Error al actualizar el tipo d earchivo'
       : 'Error al crear un nuevo tipo de archivo'
 
-    const res = await fetchCore(endpoint, {
-      method,
-      body: JSON.stringify(data),
-    })
-      .then((res) => res)
-      .catch((err) => err)
+    try {
+      const res = await postOrUpdateTipo(data)
 
-    if (res.status === 200 || res.status === 201) {
-      toast.success(successMessage)
-      handleExit()
-      router.refresh()
-    } else {
+      if (res.ok) {
+        toast.success(successMessage)
+        router.push('/admin/portal/tipo-contenido/archivo/')
+      } else {
+        toast.error(errorMessage)
+      }
+    } catch (error) {
+      console.error(error)
       toast.error(errorMessage)
     }
 
@@ -79,15 +75,12 @@ export const FrmFilesTypeEditor = (props: IProps) => {
   }
 
   //For title
-  const title = dataDeafult
-    ? 'Editar tipo de archivo'
-    : 'Añadir nuevo tipo de archivo'
   const subtitle = dataDeafult
     ? 'Editar los datos de los tipos de archivo'
     : 'Agrega los datos de los  tipos de archivo'
 
   const handleExit = () => {
-    router.push('/admin/portal/archivos/tipos/')
+    router.push('/admin/portal/tipo-contenido/archivo/')
   }
 
   return (
@@ -102,7 +95,7 @@ export const FrmFilesTypeEditor = (props: IProps) => {
           <ModalHeader>
             <div className="w-full">
               <HeaderSection
-                title={title}
+                title="Tipo de archivo"
                 subtitle={subtitle}
               />
             </div>
@@ -120,7 +113,7 @@ export const FrmFilesTypeEditor = (props: IProps) => {
                     render={({ field: { value, onChange } }) => (
                       <Input
                         aria-label="name"
-                        value={value}
+                        value={value || ''}
                         onValueChange={onChange}
                         variant="bordered"
                         radius="sm"

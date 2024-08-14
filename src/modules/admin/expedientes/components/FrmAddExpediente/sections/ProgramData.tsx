@@ -12,6 +12,7 @@ export const ProgramData = () => {
     control,
     formState: { errors },
     setValue,
+    watch,
   } = useFormContext<IProceeding>()
 
   const handleSelectProgram = (program: any) => {
@@ -35,10 +36,11 @@ export const ProgramData = () => {
             placeholder="Seleccionar programa"
             radius="sm"
             variant="bordered"
-            value={value?.nombre}
+            value={value?.nombre || ''}
             onValueChange={onChange}
-            isInvalid={errors.programa !== undefined}
-            errorMessage={errors.programa?.message as string}
+            isRequired
+            errorMessage={'Seleccione un programa'}
+            readOnly={true}
             endContent={
               <div>
                 <Button

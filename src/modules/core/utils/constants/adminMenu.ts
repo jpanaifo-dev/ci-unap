@@ -110,11 +110,11 @@ export const subMenuAdmin: IMenuBar[] = [
     items: [
       { key: '/admin/portal/archivos', text: 'Archivos' },
       { key: '/admin/portal/publicaciones', text: 'Publicaciones' },
-      { key: '/admin/portal/contenidos', text: 'Contenidos' },
       {
-        key: '/admin/portal/publicaciones/tipo-publicaciones',
-        text: 'Tipo publicaciones',
+        key: '/admin/portal/tipo-contenido',
+        text: 'Tipo de contenido',
       },
+      { key: '/admin/portal/contenidos', text: 'Contenidos' },
     ],
   },
   {

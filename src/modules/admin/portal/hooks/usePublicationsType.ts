@@ -1,33 +1,30 @@
 'use client'
 import { useState } from 'react'
-import { IPublicationType, IResApi } from '@/types'
-import { fetchCore } from '@/api'
-interface IQuery {
-  page?: number
-  name?: string
-}
+import { IPublicationType, IResApi, IPublicationTypeFilter } from '@/types'
+import { fetchPublicationsTypes } from '@/api'
 
 export const usePublicationsTypes = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [listPublicationsType, setListPublicationsType] =
     useState<IResApi<IPublicationType> | null>(null)
 
-  const getPublicationsTypes = async (props: IQuery) => {
+  const getPublicationsTypes = async (props: IPublicationTypeFilter) => {
     setLoading(true)
-    const { page, name } = props
 
-    const path = `portal/PublicacionTipo/?page=${page}&nombre__icontains=${name}`
-    const response = await fetchCore(path, { method: 'GET' })
+    try {
+      const response = await fetchPublicationsTypes(props)
 
-    if (!response?.ok) {
-      throw new Error('Error al cargar los tipos de publicacion')
+      if (response.ok) {
+        const data: IResApi<IPublicationType> = await response.json()
+        setListPublicationsType(data)
+      } else {
+        setListPublicationsType(null)
+      }
+    } catch (error) {
+      console.error('Error getPublicationsTypes:', error)
+    } finally {
+      setLoading(false)
     }
-
-    const data: IResApi<IPublicationType> =
-      (await response.json()) as IResApi<IPublicationType>
-
-    setListPublicationsType(data)
-    setLoading(false)
   }
 
   return { loading, listPublicationsType, getPublicationsTypes }

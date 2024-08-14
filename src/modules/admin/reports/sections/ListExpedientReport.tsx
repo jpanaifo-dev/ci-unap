@@ -12,6 +12,7 @@ import { IProceeding } from "@/types";
 import { FilterExpedienteOptions } from "./FilterExpedienteOptions";
 import { Button } from "@nextui-org/button";
 import { toast } from "react-toastify";
+import { IconReport } from "@tabler/icons-react";
 
 const col: IColumns[] = [
   {
@@ -153,8 +154,21 @@ export const ListExpedientReport = () => {
           {proceedings?.length} registros encontrados
         </span>
       </h2>
-      <Button onPress={handleExport}>Exportar</Button>
-      <FilterExpedienteOptions query={query} setQuery={setQuery} />
+      <section className="flex gap-2 w-full">
+        <div className="flex w-full">
+          <FilterExpedienteOptions query={query} setQuery={setQuery} />
+        </div>
+        <div className="w-1/2 flex justify-end">
+          <Button className="button-dark"
+            aria-label="button"
+            radius="sm"
+            size="sm"
+            startContent={<IconReport size={16} className="text-white" />}
+            onPress={handleExport}>
+              Exportar
+          </Button>
+        </div>
+      </section>
       <TableCustom
         placeholder="Buscar expediente"
         columns={col}

@@ -7,5 +7,5 @@ export interface IModule {
   is_active: boolean
   nivel: ILevel
   modalidad: IModality
-  programa: ILanguages
+  programa?: ILanguages
 }

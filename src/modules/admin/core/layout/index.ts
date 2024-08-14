@@ -1,3 +1,4 @@
-import { LayoutPanel } from './LayoutPanel'
+import { LayoutFrmHorizontal } from './LayoutFrmHorizontal'
+import { LayoutTestimonio } from './LayoutTestimonio'
 
-export { LayoutPanel }
+export { LayoutFrmHorizontal, LayoutTestimonio }

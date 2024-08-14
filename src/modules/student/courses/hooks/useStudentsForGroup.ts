@@ -1,32 +1,31 @@
 'use client'
 import { useState } from 'react'
-import { IGroupData } from '@/types'
-import { fetchGestor } from '@/api'
-
-interface IQuery {
-  group_id: string
-  id_docente: string
-}
+import { IGroupData, IGroupDataFilter } from '@/types'
+import { fetchAlumnosGrupo } from '@/api'
+import { getPersonId } from '@/libs'
 
 export const useStudetsForGroup = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [groupData, setGroupData] = useState<IGroupData | null>(null)
 
-  const getGroupData = async (query: IQuery) => {
+  const getGroupData = async (query: IGroupDataFilter) => {
     setLoading(true)
-    const { group_id, id_docente } = query
 
-    const response = await fetchGestor(
-      `get_alumnos_grupo/?docente_id=${id_docente}&grupo_id=${group_id}`,
-      { method: 'GET' }
-    )
+    const persona_id = await getPersonId()
 
-    if (response?.detail) {
-      throw new Error('Error al cargar los grupos')
+    try {
+      const response = await fetchAlumnosGrupo(query)
+
+      if (response?.ok) {
+        const data = await response.json()
+        setGroupData(data)
+      } else {
+        setGroupData(null)
+      }
+    } catch (error) {
+      setGroupData(null)
     }
 
-    const data: IGroupData = response as IGroupData
-    setGroupData(data)
     setLoading(false)
   }
 

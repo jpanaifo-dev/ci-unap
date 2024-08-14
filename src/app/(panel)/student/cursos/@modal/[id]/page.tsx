@@ -1,6 +1,6 @@
-import { fetchCore } from '@/api'
 import { CourseRange } from '@/modules/teacher'
 import { IGroup, IResApi } from '@/types'
+import { fetchGrupoList } from '@/api'
 
 interface IProps {
   params: {
@@ -12,24 +12,30 @@ export default async function Page(props: IProps) {
   const { params } = props
   const { id } = params
 
-  const response = await fetchCore(`gestor/GrupoList/?id=${id}`, {
-    method: 'GET',
-    cache: 'no-cache',
-  })
-
-  if (!response.ok) {
-    return (
-      <>
-        <h1 className="text-3xl font bold">Error</h1>
-      </>
-    )
+  let data: IResApi<IGroup> = {
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
   }
 
-  const data: IResApi<IGroup> = (await response.json()) as IResApi<IGroup>
+  try {
+    const res = await fetchGrupoList({ id: parseInt(id) })
+
+    if (res.ok) {
+      data = await res.json()
+    }
+  } catch (error) {
+    console.error('Error:', error)
+  }
 
   return (
-    <>
-      <CourseRange groupData={data.results[0]} />
-    </>
+    <main>
+      {data?.results?.length > 0 ? (
+        <CourseRange groupData={data.results[0]} />
+      ) : (
+        <div>Grupo no encontrado</div>
+      )}
+    </main>
   )
 }

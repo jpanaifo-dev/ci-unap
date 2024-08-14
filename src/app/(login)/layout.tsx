@@ -1,5 +1,7 @@
 import Image from 'next/image'
 import { logoCiunap, svgLogin } from '@/assets'
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify'
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -13,6 +15,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 alt="Login"
                 width={420}
                 height={420}
+                priority
               />
             </div>
             <div className="flex flex-col items-center max-w-sm justify-center">
@@ -33,6 +36,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               alt="Logo CIUNAP"
               width={200}
               height={200}
+              priority
             />
           </header>
           <main className="p-6 w-full flex flex-col items-center">
@@ -40,6 +44,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           </main>
         </section>
       </main>
+      <ToastContainer />
     </>
   )
 }

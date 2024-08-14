@@ -1,37 +1,25 @@
 'use client'
 import { useState } from 'react'
-import { HeaderSection } from '@/modules/admin'
-import { DialogAction } from '@/components'
-import { IPublicationFile } from '@/types'
-import {
-  Button,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-} from '@nextui-org/react'
+import { HeaderSection, LayoutFrmHorizontal } from '@/modules/admin'
+import { IPublicationList, IPublicationType } from '@/types'
+import { Button } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 
-const isProduction = process.env.NODE_ENV === 'production'
-const urlProd = process.env.API_URL_DEV
-const urlLocal = process.env.API_URL_PROD
-
-const urlBase = isProduction ? urlProd : urlLocal
-
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
+import { DialogAction } from '@/components'
 import {
-  ActionData,
-  ContentData,
-  PFileTypeData,
-  FileData,
   InfoData,
+  ActionData,
+  PublicationTypeData,
+  ContentData,
 } from './sections'
+import { fetchCore } from '@/api'
 
 //To alert
 import { toast } from 'react-toastify'
 
 interface IProps {
-  dataDeafult?: IPublicationFile
+  dataDeafult?: IPublicationList
 }
 
 export const FrmPublicationEditor = (props: IProps) => {
@@ -41,72 +29,39 @@ export const FrmPublicationEditor = (props: IProps) => {
   const [isOpen, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  const methods = useForm<IPublicationFile>({
-    defaultValues: {
-      ...dataDeafult,
-      tipo_id: String(dataDeafult?.tipo.id) || '',
-      is_active: dataDeafult?.is_active || true,
-      is_portada: dataDeafult?.is_portada || false,
-    },
+  const methods = useForm<IPublicationList>({
+    defaultValues: dataDeafult,
   })
 
   const onSubmit = () => {
     setOpen(true)
   }
 
-  const handleFormSubmit: SubmitHandler<IPublicationFile> = async (
-    data: IPublicationFile
+  const handleFormSubmit: SubmitHandler<IPublicationList> = async (
+    data: IPublicationList
   ) => {
     setLoading(true)
     setOpen(false)
-
-    const { tipo_id, uploadArchivo, publicacion, ...rest } = data
-
-    const archivoIsPdfOrWord =
-      uploadArchivo?.[0]?.type.includes('pdf') ||
-      uploadArchivo?.[0]?.type.includes('word') ||
-      uploadArchivo?.[0]?.type.includes('officedocument') ||
-      uploadArchivo?.[0]?.type.includes('application') ||
-      uploadArchivo?.[0]?.type.includes('msword')
-
-    const newData = {
-      ...rest,
-      archivo: uploadArchivo?.[0] || [],
-      publicacion: publicacion.id,
-      tipo: tipo_id,
-      is_portada: archivoIsPdfOrWord ? false : data.is_portada,
-    }
-
-    const formData = new FormData()
-    // Adjunta el archivo al FormData
-    if (uploadArchivo && uploadArchivo.length > 0) {
-      formData.append('archivo', uploadArchivo[0])
-    }
-    // Adjunta los otros campos de datos al FormData
-    Object.keys(newData).forEach((key) => {
-      if (key !== 'archivo') {
-        formData.append(key, (newData as Record<string, any>)[key])
-      }
-    })
-
-    const successMessage = dataDeafult?.id
-      ? 'Contenido de la publicación actualizado correctamente'
-      : 'Contenido de la publicación guardado correctamente'
-    const errorMessage = dataDeafult?.id
-      ? 'Error al actualizar el contenido de la publicación'
-      : 'Error al guardar el contenido de la publicación'
-
     const endpoint = dataDeafult?.id
-      ? `${urlBase}portal/PublicacionFile/${data.id}/`
-      : `${urlBase}portal/PublicacionFile/`
+      ? `portal/Publicacion/${data.id}/`
+      : 'portal/Publicacion/'
     const method = dataDeafult?.id ? 'PUT' : 'POST'
 
-    const res = await fetch(endpoint, {
+    const successMessage = dataDeafult?.id
+      ? 'Publicación actualizada correctamente'
+      : 'Publicación guardada correctamente'
+    const errorMessage = dataDeafult?.id
+      ? 'Error al actualizar la publicación'
+      : 'Error al guardar la publicación'
+
+    const newData = {
+      ...data,
+      tipo: data?.tipo?.id,
+    }
+
+    const res = await fetchCore(endpoint, {
       method: method,
-      body: formData,
-      headers: {
-        Accept: 'application/json',
-      },
+      body: JSON.stringify(newData),
     })
       .then((res) => res)
       .catch((err) => err)
@@ -116,76 +71,88 @@ export const FrmPublicationEditor = (props: IProps) => {
       handleExit()
     } else {
       toast.error(errorMessage)
-      console.log(errorMessage)
     }
 
     setLoading(false)
   }
 
   //For title
-  const title = dataDeafult ? 'Editar contenido' : 'Nuevo contenido'
+  const title = dataDeafult ? 'Editar publicación' : 'Nueva publicación'
 
   const subtitle = dataDeafult
-    ? 'Modifica los datos del contenido'
-    : 'Completa los datos del nuevo contenido'
+    ? 'Modifica los datos de la publicación'
+    : 'Agrega una nueva publicación'
 
   const handleExit = () => {
-    router.push('/admin/portal/contenidos')
+    router.refresh()
+    methods.setValue('tipo', {} as IPublicationType)
+    methods.setValue('is_active', false)
+    methods.setValue('is_banner', false)
+    methods.setValue('contenido', '')
+    router.push('/admin/portal/publicaciones')
   }
 
   return (
     <>
-      <Modal
-        isOpen
-        onClose={handleExit}
-        radius="sm"
-        size="4xl"
-        scrollBehavior="inside"
-      >
-        <ModalContent>
-          <ModalHeader>
-            <main className="w-full">
+      <main className="w-full flex flex-col items-center">
+        <section className="w-full max-w-6xl section-panel-sticky">
+          <FormProvider {...methods}>
+            <main className="w-full pb-4">
               <HeaderSection
                 title={title}
                 subtitle={subtitle}
               />
             </main>
-          </ModalHeader>
-          <ModalBody>
-            <FormProvider {...methods}>
-              <form
-                onSubmit={methods.handleSubmit(onSubmit)}
-                className="flex flex-col gap-5"
+            <form
+              onSubmit={methods.handleSubmit(onSubmit)}
+              className="flex flex-col gap-5"
+            >
+              <LayoutFrmHorizontal
+                title="Título de la publicación"
+                subtitle="Ingresa el título de la publicación, Recuerda que no es más de 150 caracteres"
               >
                 <InfoData />
+              </LayoutFrmHorizontal>
+              <LayoutFrmHorizontal
+                title="Contenido de la publicación"
+                subtitle="Crear el contenido de la publicación. Puedes darle formato al texto y agregar enlaces."
+              >
                 <ContentData />
-                <FileData />
-                <PFileTypeData />
+              </LayoutFrmHorizontal>
+              <LayoutFrmHorizontal
+                title="Tipo de publicación"
+                subtitle="Puedes seleccionar el tipo de publicación que deseas crear. Ejemplo: Noticia, Evento, etc."
+              >
+                <PublicationTypeData />
+              </LayoutFrmHorizontal>
+              <LayoutFrmHorizontal
+                title="Configuración de privacidad"
+                subtitle="Puedes seleccionar si la publicación será visible para los usuarios del portal y si será visible en el banner."
+              >
                 <ActionData />
-                <footer className="flex items-center gap-3 justify-end">
-                  <Button
-                    className="button-dark"
-                    radius="sm"
-                    type="submit"
-                    isLoading={loading}
-                    isDisabled={loading}
-                  >
-                    {dataDeafult?.id ? 'Actualizar' : 'Guardar'}
-                  </Button>
+              </LayoutFrmHorizontal>
+              <footer className="flex items-center gap-3 justify-end sticky bottom-0 py-4 bg-white z-20 border-t-2">
+                <Button
+                  className="button-dark"
+                  radius="sm"
+                  type="submit"
+                  isLoading={loading}
+                  isDisabled={loading}
+                >
+                  {dataDeafult?.id ? 'Actualizar' : 'Guardar'}
+                </Button>
 
-                  <Button
-                    radius="sm"
-                    onPress={handleExit}
-                  >
-                    Cancelar
-                  </Button>
-                </footer>
-              </form>
-            </FormProvider>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
-
+                <Button
+                  radius="sm"
+                  onPress={handleExit}
+                >
+                  Cancelar
+                </Button>
+              </footer>
+            </form>
+          </FormProvider>
+        </section>
+      </main>
       <DialogAction
         isOpen={isOpen}
         title="Guardar cambios"

@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 
 import { useEffect, useState } from "react";
-import { Avatar, Button, Input, Select, SelectItem } from "@nextui-org/react";
+import { Avatar, Button, Input, Select, SelectItem, Tooltip } from "@nextui-org/react";
 import { IconClearAll, IconSearch } from "@tabler/icons-react";
 import { usePrograms } from "@/modules/admin";
 
@@ -88,54 +88,13 @@ export const FilterExpedienteOptions = ({
           }}
         />
       </div>
-      <div className="flex flex-col md:flex-row gap-3">
-        {/* <Select
-          items={retiredOption}
-          label="Seleccionar retiro"
-          placeholder="Seleccionar retiro"
-          labelPlacement="outside-left"
-          classNames={{
-            base: "max-w-xs",
-          }}
-          selectedKeys={retired ? [retired] : []}
-          onChange={handleRetiredChange}
-        >
-          {(options) => (
-            <SelectItem key={options.key} textValue={options.label}>
-              <div className="flex gap-2 items-center">
-                <div className="flex flex-col">
-                  <span className="text-small">{options.label}</span>
-                </div>
-              </div>
-            </SelectItem>
-          )}
-        </Select>
-        <Select
-          items={graduatedOption}
-          label="Seleccionar graduación"
-          placeholder="Seleccionar graduación"
-          labelPlacement="outside-left"
-          classNames={{
-            base: "max-w-xs",
-          }}
-          selectedKeys={graduated ? [graduated] : []}
-          onChange={handleGraduatedChange}
-        >
-          {(options) => (
-            <SelectItem key={options.key} textValue={options.label}>
-              <div className="flex gap-2 items-center">
-                <div className="flex flex-col">
-                  <span className="text-small">{options.label}</span>
-                </div>
-              </div>
-            </SelectItem>
-          )}
-        </Select> */}
+      <div className="flex flex-col md:flex-row gap-3 justify-center items-center">
         <Select
           items={situation}
           label="Seleccionar situación"
           placeholder="Seleccionar situación"
           labelPlacement="outside-left"
+          size="sm"
           classNames={{
             base: "max-w-xs",
           }}
@@ -154,6 +113,7 @@ export const FilterExpedienteOptions = ({
         </Select>
         <div className="flex">
           <Select
+            size="sm"
             items={programs}
             label="Seleccionar programa"
             placeholder="Seleccionar programa"
@@ -201,15 +161,20 @@ export const FilterExpedienteOptions = ({
               </SelectItem>
             )}
           </Select>
-          <Button
-            onPress={resetFilters}
-            aria-label="button"
-            radius="sm"
-            size="sm"
-            className="button-dark h-13"
+          <Tooltip
+            content="Limpiar filtros"
           >
-            <IconClearAll size={16} className="text-white" />{" "}
-          </Button>
+            <Button
+              onPress={resetFilters}
+              aria-label="button"
+              radius="sm"
+              size="sm"
+              className="button-dark ml-2"
+            >
+              <IconClearAll size={16} className="text-white" />
+            </Button>
+          </Tooltip>
+
         </div>
       </div>
     </div>

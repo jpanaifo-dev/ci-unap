@@ -29,7 +29,7 @@ export const StatusFilter = () => {
         aria-label="Estado"
         variant="bordered"
         radius="sm"
-        selectedKeys={[getParams('status', 'all')] || ['']}
+        selectedKeys={[getParams('status', 'all')]}
         onSelectionChange={handleStatusChange}
         defaultSelectedKeys={['all']}
         disallowEmptySelection

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { IGroupAuth } from './types'
+import { IGroupAuth, IUserData } from './types'
 
 type Group = 'ADMINISTRATIVO' | 'ADMINISTRADOR' | 'DOCENTE' | 'ALUMNO'
 
@@ -13,12 +13,13 @@ const routePermissions: Record<string, Group[]> = {
   '/student': ['ALUMNO'],
 }
 
-export function middleware(request: NextRequest) {
+export async function middleware(request: NextRequest) {
   const currentUser = request.cookies.get(`${APP_NAME}_user`)?.value
-  const groups = request.cookies.get(`${APP_NAME}_groups`)?.value
+  const dataUser: IUserData = currentUser ? await JSON.parse(currentUser) : null
 
-  const groupsParsed: IGroupAuth[] = groups ? JSON.parse(groups) : []
-
+  const groupsParsed: IGroupAuth[] = dataUser
+    ? await JSON.parse(dataUser?.groups as unknown as string)
+    : []
   const isAuthenticated = currentUser !== undefined
 
   if (!isAuthenticated) {
@@ -31,7 +32,7 @@ export function middleware(request: NextRequest) {
   // Verificar los permisos basados en la ruta
   for (const [route, allowedGroups] of Object.entries(routePermissions)) {
     if (pathname.startsWith(route)) {
-      const hasPermission = groupsParsed.some((group) =>
+      const hasPermission = groupsParsed?.some((group) =>
         allowedGroups.includes(group.name.toUpperCase() as Group)
       )
       if (!hasPermission) {

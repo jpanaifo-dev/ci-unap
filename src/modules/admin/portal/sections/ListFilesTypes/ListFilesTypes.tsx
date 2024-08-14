@@ -47,15 +47,11 @@ export const ListFilesTypes = () => {
   const { getPortalFilesTypes, listFiles, loading } = useFilesTypes()
   const pathname = usePathname()
 
-  const isFileType = pathname === '/admin/portal/archivos/tipos'
-
   useEffect(() => {
-    if (isFileType) {
-      getPortalFilesTypes({
-        page,
-        name: query,
-      })
-    }
+    getPortalFilesTypes({
+      page,
+      nombre__icontains: query,
+    })
   }, [query, page, pathname])
 
   const tiposDocs: IPortalFileType[] = listFiles?.results || []

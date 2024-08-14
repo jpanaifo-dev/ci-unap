@@ -2,7 +2,7 @@ import { HeaderSection, ListTeachers } from '@/modules/admin'
 
 export default function Page() {
   return (
-    <main className="flex flex-col gap-3">
+    <main className="flex flex-col gap-3 section-panel">
       <HeaderSection
         title="Lista de docentes"
         subtitle="Lista de docentes que imparten cursos en la plataforma"

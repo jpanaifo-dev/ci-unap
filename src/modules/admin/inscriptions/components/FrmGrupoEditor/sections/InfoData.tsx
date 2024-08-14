@@ -1,16 +1,7 @@
 'use client'
-import {
-  DateRangePicker,
-  Input,
-  Select,
-  SelectItem,
-  CalendarDate,
-  RangeValue,
-  Checkbox,
-} from '@nextui-org/react'
+import { Input, Select, SelectItem } from '@nextui-org/react'
 import { IGroup } from '@/types'
 import { useFormContext, Controller } from 'react-hook-form'
-import { parseDate } from '@internationalized/date'
 
 const optionGroup = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H']
 
@@ -18,21 +9,8 @@ export const InfoData = () => {
   const {
     control,
     formState: { errors },
-    setValue,
     watch,
   } = useFormContext<IGroup>()
-
-  const handleChangeRange = (value: RangeValue<CalendarDate>) => {
-    if (value && value.start && value.end) {
-      const dateInit = String(value.start)
-      const dateEnd = String(value.end)
-      setValue('fecha_inicio', dateInit)
-      setValue('fecha_final', dateEnd)
-      setValue('range', value)
-    }
-  }
-
-  const isEdit = watch('id')
 
   return (
     <>
@@ -97,31 +75,46 @@ export const InfoData = () => {
           )}
         />
       </div>
-      <Controller
-        control={control}
-        name="range"
-        rules={{
-          required: 'Seleccione un rango',
-        }}
-        render={({ field: { value } }) => {
-          const startDate = value?.start ?? parseDate('2024-01-01');
-          const endDate = value?.end ?? parseDate('2024-01-31');
-          return (
-            <DateRangePicker
-              aria-label="Fecha de inicio y fin"
-              label="Fecha de inicio y fin"
+      <section className="flex items-center gap-4">
+        <Controller
+          control={control}
+          name="fecha_inicio"
+          rules={{
+            required: 'Seleccione una fecha de inicio',
+          }}
+          render={({ field: { value, onChange } }) => (
+            <Input
+              aria-label="date start"
+              label="Fecha de inicio"
+              labelPlacement="outside"
+              value={value}
+              onValueChange={onChange}
               radius="sm"
               variant="bordered"
-              labelPlacement="outside"
-              visibleMonths={3}
-              value={{ start: startDate, end: endDate }}
-              onChange={handleChangeRange}
-              isInvalid={errors.range !== undefined}
-              errorMessage={errors.range?.message as string}
+              type="date"
             />
-          );
-        }}
-      />
+          )}
+        />
+        <Controller
+          control={control}
+          name="fecha_final"
+          rules={{
+            required: 'Seleccione una fecha de fin',
+          }}
+          render={({ field: { value, onChange } }) => (
+            <Input
+              aria-label="Date end"
+              label="Fecha de inicio"
+              labelPlacement="outside"
+              value={value}
+              onValueChange={onChange}
+              radius="sm"
+              variant="bordered"
+              type="date"
+            />
+          )}
+        />
+      </section>
       <Controller
         control={control}
         name="resolucion"
@@ -143,22 +136,6 @@ export const InfoData = () => {
           />
         )}
       />
-      {isEdit && (
-        <Controller
-          control={control}
-          name="is_active"
-          render={({ field: { onChange, value } }) => (
-            <Checkbox
-              aria-label="Activo"
-              isSelected={value}
-              onValueChange={onChange}
-              defaultChecked
-            >
-              Activo
-            </Checkbox>
-          )}
-        />
-      )}
     </>
   )
 }

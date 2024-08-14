@@ -29,6 +29,8 @@ export const FrmAddPerson = (props: IProps) => {
   const methods = useForm<IPerson>({
     defaultValues: defauldata,
   })
+  const isDirty = methods.formState.isDirty
+
   const onSubmit = () => {
     setOpen(true)
   }
@@ -72,48 +74,21 @@ export const FrmAddPerson = (props: IProps) => {
     <>
       <FormProvider {...methods}>
         <form
-          className="w-full flex flex-col gap-7 max-w-4xl sm:px-6"
+          className="w-full flex flex-col gap-8 relative"
           onSubmit={methods.handleSubmit(onSubmit)}
         >
-          <section className="flex flex-col gap-3">
-            <h2 className="text-gray-500 font-semibold">Datos personales</h2>
-            <Divider />
-            <PersonalData />
-          </section>
-          <section className="flex flex-col gap-3">
-            <h2 className="text-gray-500 font-semibold">
-              Estado de la persona
-            </h2>
-            <Divider />
-            <StatusData />
-          </section>
-          <section className="flex flex-col gap-3">
-            <h2 className="text-gray-500 font-semibold">
-              Documentos de la persona
-            </h2>
-            <Divider />
-            <DocumentData />
-          </section>
-
-          <section className="flex flex-col gap-3">
-            <h2 className="text-gray-500 font-semibold">
-              Ubicación de la persona
-            </h2>
-            <LocationData />
-          </section>
-          <section className="flex flex-col gap-3">
-            <h2 className="text-gray-500 font-semibold">Datos de contacto</h2>
-            <Divider />
-            <ContactData />
-          </section>
-
-          <footer className="flex items-center gap-3 justify-end">
+          <PersonalData />
+          <StatusData />
+          <DocumentData />
+          <LocationData />
+          <ContactData />
+          <footer className="flex items-center gap-3 justify-end sticky bottom-0 right-0 left-0 z-20 bg-white py-3 border-t">
             <Button
               className="button-dark"
               radius="sm"
               type="submit"
               isLoading={loading}
-              isDisabled={loading}
+              isDisabled={loading || !isDirty}
             >
               {defauldata?.id ? 'Actualizar' : 'Guardar'}
             </Button>

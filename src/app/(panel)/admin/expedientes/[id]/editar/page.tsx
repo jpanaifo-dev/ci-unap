@@ -24,11 +24,7 @@ export default async function Page(props: IProps) {
 
   return (
     <>
-      <HeaderSection
-        title="Editar expediente"
-        subtitle="Modifica los datos del expediente."
-      />
-      <main className="py-4">
+      <main className="w-full flex flex-col items-center pt-4">
         <FrmAddExpediente data={data.results[0]} />
       </main>
     </>

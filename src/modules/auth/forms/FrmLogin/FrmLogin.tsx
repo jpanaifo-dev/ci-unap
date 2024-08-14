@@ -14,12 +14,11 @@ import { fetchCore } from '@/api'
 const app_name = process.env.APP_NAME
 
 //To alert
-import { toast, ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import { toast } from 'react-toastify'
 
 //Eliminar cuando se agrega la funcion auth
 import { useRouter } from 'next/navigation'
-import { createCookie, getCookie, redirectToRoleUrl } from '@/utils'
+import { createCookie, redirectToRoleUrl } from '@/utils'
 
 export const FrmLogin = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -38,23 +37,32 @@ export const FrmLogin = () => {
 
     if (response.ok) {
       const dataRes: IAuthUser = (await response.json()) as IAuthUser
-      await createCookie(`${app_name}_token`, dataRes.token)
-      await createCookie(`${app_name}_user`, JSON.stringify(dataRes.user))
-      await createCookie(`${app_name}_persona_id`, dataRes.persona_id)
-      await createCookie(`${app_name}_persona_nombres`, dataRes.persona_nombres)
-      await createCookie(`${app_name}_groups`, JSON.stringify(dataRes.groups))
-      await createCookie(
-        `${app_name}_permissions`,
-        JSON.stringify(dataRes.permissions)
-      )
-      await createCookie(`${app_name}_is_superuser`, dataRes.user.is_superuser)
-      await createCookie(`${app_name}_is_staff`, dataRes.user.is_staff)
-      await createCookie(`${app_name}_is_active`, dataRes.user.is_active)
-      await createCookie(`${app_name}_last_login`, dataRes.user.last_login)
-      await createCookie(`${app_name}_username`, dataRes.user.username)
-      await createCookie(`${app_name}_email`, dataRes.user.email)
 
-      toast.success('Bienvenido')
+      const cookieData = {
+        token: dataRes.token,
+        user: JSON.stringify(dataRes.user),
+        persona_id: dataRes.persona_id,
+        persona_nombres: dataRes.persona_nombres,
+        groups: JSON.stringify(dataRes.groups),
+        permissions: dataRes.permissions,
+        is_superuser: dataRes.user.is_superuser,
+        is_staff: dataRes.user.is_staff,
+        is_active: dataRes.user.is_active,
+        last_login: dataRes.user.last_login,
+        username: dataRes.user.username,
+        email: dataRes.user.email,
+      }
+
+      const cookieValue = await JSON.stringify(cookieData)
+
+      await createCookie(`${app_name}_user`, cookieValue)
+
+      toast.success(
+        <div>
+          <p className="text-xs text-gray-500">Bienvenido</p>
+          <h3 className="text-sm font-medium">{dataRes.persona_nombres}</h3>
+        </div>
+      )
       await router.push(redirectToRoleUrl(dataRes.groups).link)
       clearFields()
     } else {
@@ -95,7 +103,7 @@ export const FrmLogin = () => {
                 radius="sm"
                 variant="bordered"
                 labelPlacement="outside"
-                value={value}
+                value={value || ''}
                 onValueChange={onChange}
                 isInvalid={methods.formState.errors.email !== undefined}
                 errorMessage={methods.formState.errors.email?.message}
@@ -118,7 +126,7 @@ export const FrmLogin = () => {
                 variant="bordered"
                 labelPlacement="outside"
                 type="password"
-                value={value}
+                value={value || ''}
                 onValueChange={onChange}
                 isInvalid={methods.formState.errors.password !== undefined}
                 errorMessage={methods.formState.errors.password?.message}
@@ -154,10 +162,11 @@ export const FrmLogin = () => {
               startContent={
                 <div>
                   <Image
-                    width="24"
-                    height="24"
+                    width={24}
+                    height={24}
                     src="https://img.icons8.com/color/48/google-logo.png"
                     alt="google-logo"
+                    fetchPriority="high"
                   />
                 </div>
               }
@@ -167,7 +176,6 @@ export const FrmLogin = () => {
           </header>
         </form>
       </FormProvider>
-      <ToastContainer />
     </>
   )
 }

@@ -28,7 +28,7 @@ export const AcademicData = () => {
             labelPlacement="outside"
             placeholder="Seleccionar grado académico"
             disallowEmptySelection
-            selectedKeys={[value] || ['']}
+            selectedKeys={value || ''}
             onChange={(value) => onChange(value)}
             defaultSelectedKeys={['M']}
             isInvalid={errors.grado_academico !== undefined}

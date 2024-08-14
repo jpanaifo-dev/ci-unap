@@ -77,7 +77,7 @@ export const FrmDiscountEditor = (props: IProps) => {
 
   const handleExit = () => {
     methods.reset()
-    router.push('/admin/expedientes/descuentos')
+    router.push('/admin/pagos/descuentos')
   }
 
   const title = defaulData?.id ? 'Editar descuento' : 'Nuevo descuento'

@@ -44,3 +44,32 @@
     @apply font-bold;
   }
 }
+
+/*styles panel.css*/
+.bg-panel {
+  @apply bg-gray-100 dark:bg-gray-700;
+}
+
+.section-panel {
+  @apply bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-4 sm:p-6 rounded-lg;
+}
+
+.section-panel-sticky {
+  @apply bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-4 pt-4 sm:px-6 sm:pt-6 pb-0 rounded-lg;
+}
+
+.title-section {
+  @apply text-lg font-bold;
+}
+
+.description-section {
+  @apply text-sm text-gray-500;
+}
+
+.title-form {
+  @apply text-sm font-bold;
+}
+
+.description-form {
+  @apply text-xs text-gray-500;
+}

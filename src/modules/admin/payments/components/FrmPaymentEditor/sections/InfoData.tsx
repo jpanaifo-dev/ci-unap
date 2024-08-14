@@ -53,52 +53,54 @@ export const InfoData = () => {
           />
         )}
       />
-      <Controller
-        control={control}
-        name="num_operacion"
-        rules={{
-          required: 'Ingrese el número de operación',
-          pattern: {
-            value: /^[0-9]+$/,
-            message: 'Ingrese un monto válido',
-          },
-        }}
-        render={({ field: { value, onChange } }) => (
-          <Input
-            label="Número de operación"
-            placeholder="Ingrese el número de operación"
-            labelPlacement="outside"
-            radius="sm"
-            variant="bordered"
-            value={value}
-            onValueChange={onChange}
-            isInvalid={errors.num_operacion !== undefined}
-            errorMessage={errors.num_operacion?.message as string}
-          />
-        )}
-      />
+      <section className='grid grid-cols-1 lg:grid-cols-2 gap-4'>
+        <Controller
+          control={control}
+          name="num_operacion"
+          rules={{
+            required: 'Ingrese el número de operación',
+            pattern: {
+              value: /^[0-9]+$/,
+              message: 'Ingrese un monto válido',
+            },
+          }}
+          render={({ field: { value, onChange } }) => (
+            <Input
+              label="Número de operación"
+              placeholder="Ingrese el número de operación"
+              labelPlacement="outside"
+              radius="sm"
+              variant="bordered"
+              value={value}
+              onValueChange={onChange}
+              isInvalid={errors.num_operacion !== undefined}
+              errorMessage={errors.num_operacion?.message as string}
+            />
+          )}
+        />
 
-      <Controller
-        control={control}
-        name="fecha_operacion"
-        rules={{
-          required: 'Ingrese la fecha de operación',
-        }}
-        render={({ field: { value, onChange } }) => (
-          <Input
-            label="Fecha de operación"
-            placeholder="Ingrese la   fecha de operación"
-            labelPlacement="outside"
-            radius="sm"
-            variant="bordered"
-            value={value}
-            onValueChange={onChange}
-            type="date"
-            isInvalid={errors.fecha_operacion !== undefined}
-            errorMessage={errors.fecha_operacion?.message as string}
-          />
-        )}
-      />
+        <Controller
+          control={control}
+          name="fecha_operacion"
+          rules={{
+            required: 'Ingrese la fecha de operación',
+          }}
+          render={({ field: { value, onChange } }) => (
+            <Input
+              label="Fecha de operación"
+              placeholder="Ingrese la   fecha de operación"
+              labelPlacement="outside"
+              radius="sm"
+              variant="bordered"
+              value={value}
+              onValueChange={onChange}
+              type="date"
+              isInvalid={errors.fecha_operacion !== undefined}
+              errorMessage={errors.fecha_operacion?.message as string}
+            />
+          )}
+        />
+      </section>
       <Controller
         control={control}
         name="monto"
@@ -113,7 +115,7 @@ export const InfoData = () => {
           <Input
             aria-label="Monto"
             label="Monto"
-            placeholder="Ingrese el monto"
+            placeholder="s/ 0.00"
             labelPlacement="outside"
             radius="sm"
             variant="bordered"

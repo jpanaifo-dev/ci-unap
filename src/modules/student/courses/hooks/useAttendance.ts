@@ -1,43 +1,28 @@
 'use client'
 import { useState } from 'react'
-import { IResApi } from '@/types'
-import { fetchGestor } from '@/api'
-import { IAsistencia } from '@/types'
-
-const id_docente = 1
-
-interface IQuery {
-  inscripcion__id?: string
-  inscripcion__grupo__id?: string
-  inscripcion__matricula__id?: string
-  inscripcion__matricula__expediente__id?: string
-}
+import { IAsistenciaFilter, IAsistenciaList, IResApi } from '@/types'
+import { fetchAsistenciaList } from '@/api'
 
 export const useAttendance = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [listAttendaces, setListAttendances] =
-    useState<IResApi<IAsistencia> | null>(null)
+    useState<IResApi<IAsistenciaList> | null>(null)
 
-  const getAttendance = async (query: IQuery) => {
-    const {
-      inscripcion__grupo__id = '',
-      inscripcion__id = '',
-      inscripcion__matricula__id = '',
-      inscripcion__matricula__expediente__id = '',
-    } = query
+  const getAttendance = async (filter: IAsistenciaFilter) => {
     setLoading(true)
 
-    const response = await fetchGestor(
-      `Asistencia/?inscripcion__id=${inscripcion__id}&inscripcion__grupo__id=${inscripcion__grupo__id}1&inscripcion__matricula__id=${inscripcion__matricula__id}&inscripcion__matricula__expediente__id=${inscripcion__matricula__expediente__id}`,
-      { method: 'GET' }
-    )
+    try {
+      const response = await fetchAsistenciaList(filter)
 
-    if (response?.detail) {
-      throw new Error('Error al cargar los grupos')
+      if (response?.ok) {
+        const data = await response.json()
+        setListAttendances(data)
+      }
+    } catch (error) {
+      console.error(error)
+      setListAttendances(null)
     }
 
-    const data: IResApi<IAsistencia> = response as IResApi<IAsistencia>
-    setListAttendances(data)
     setLoading(false)
   }
 

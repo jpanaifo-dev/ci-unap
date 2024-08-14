@@ -12,6 +12,7 @@ interface IQEnrollments {
   apellido_materno?: string
   programa_id?: string
   fecha?: string
+  expediente_id?: string
 }
 
 export const useEnrollments = () => {
@@ -31,6 +32,7 @@ export const useEnrollments = () => {
       apellido_materno,
       programa_id,
       fecha,
+      expediente_id,
     } = query
 
     const nDocument = numero_documento || ''
@@ -40,8 +42,9 @@ export const useEnrollments = () => {
     const name = nombres || ''
     const surnameP = apellido_paterno || ''
     const surnameM = apellido_materno || ''
+    const expedienteId = expediente_id || ''
 
-    const url = `MatriculaList/?is_active=${isActive}&fecha=${date}&expediente__persona__numero_documento__icontains=${nDocument}&expediente__persona__nombres__icontains=${name}&expediente__persona__apellido_paterno__icontains=${surnameP}&expediente__persona__apellido_materno__icontains=${surnameM}&expediente__programa__id=${programaId}&page=${page}`
+    const url = `MatriculaList/?is_active=${isActive}&fecha=${date}&expediente__persona__numero_documento__icontains=${nDocument}&expediente__persona__nombres__icontains=${name}&expediente__persona__apellido_paterno__icontains=${surnameP}&expediente__persona__apellido_materno__icontains=${surnameM}&expediente__programa__id=${programaId}&page=${page}&expediente__id=${expedienteId}`
 
     const response = await fetchGestor(url, { method: 'GET' })
     if (response?.detail) {

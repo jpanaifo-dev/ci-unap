@@ -22,6 +22,11 @@ const columns: IColumns[] = [
     align: 'center',
   },
   {
+    key: 'modalidad',
+    label: 'Modalidad',
+    align: 'center',
+  },
+  {
     key: 'nivel',
     label: 'Nivel',
     align: 'center',
@@ -61,6 +66,7 @@ export const ModuleList = (props: IProps) => {
       id: item?.id,
       nombre: item?.nombre,
       nivel: item?.nivel?.nombre,
+      modalidad: item?.modalidad?.nombre,
       program: renderColProgram(item?.modalidad?.programa),
     }
   })

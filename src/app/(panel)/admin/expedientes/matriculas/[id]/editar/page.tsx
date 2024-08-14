@@ -23,14 +23,10 @@ export default async function Page(props: IProps) {
   const data: IResApi<IEnrollment> = res as IResApi<IEnrollment>
 
   return (
-    <>
-      <HeaderSection
-        title="Editar matrícula"
-        subtitle="Modifica los datos de la matrícula"
-      />
-      <main className="py-4">
+    <main className="flex flex-col gap-4 items-center ">
+      <section className="w-full max-w-3xl">
         <FrmEnrollmentEditor data={data.results[0]} />
-      </main>
-    </>
+      </section>
+    </main>
   )
 }

@@ -5,7 +5,7 @@ import { fetchGestor } from '@/api'
 
 interface IQuery {
   name: string
-  program_id: string
+  program_id: number
   status: string
 }
 

@@ -27,16 +27,13 @@ export const DetailsEnrollment = (props: IProps) => {
     is_retired,
   } = props.defaultData
 
-  const nivelData =
-    props.defaultData?.nivel !== typeof 'string'
-      ? (props.defaultData?.nivel as ILevel)
-      : null
+  const nivelData = props.defaultData.nivel as ILevel
 
   return (
     <>
-      <main className="w-full border max-w-6xl p-4 rounded-lg flex flex-col gap-4">
+      <main className="w-full max-w-6xl flex flex-col gap-4 section-panel">
         <header>
-          <div>
+          <div className="flex flex-col gap-2">
             <Chip
               aria-label="chip-item"
               variant="flat"
@@ -59,7 +56,7 @@ export const DetailsEnrollment = (props: IProps) => {
         </header>
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
           <section className="col-span-2 lg:col-span-4">
-            <h1 className="text-gray-400 font-semibold text-lg underline">
+            <h1 className="font-medium text-base">
               Detalles{' '}
             </h1>
           </section>
@@ -72,7 +69,7 @@ export const DetailsEnrollment = (props: IProps) => {
         </section>
         <section className="grid grid-cols-2 lg:grid-cols-4 gap-4 text-sm">
           <section className="col-span-2 lg:col-span-4">
-            <h1 className="text-gray-400 font-semibold text-lg underline">
+            <h1 className="font-medium text-base">
               Detalles del expediente {eid}
             </h1>
           </section>

@@ -1,33 +1,25 @@
 'use client'
 import { useState } from 'react'
-import { IPublication, IResApi } from '@/types'
-import { fetchCore } from '@/api'
-
-interface IQuery {
-  page?: number
-  name?: string
-}
+import { IPublicationFilter, IPublicationList, IResApi } from '@/types'
+import { fetchPublicationsList } from '@/api'
 
 export const usePublications = () => {
   const [loading, setLoading] = useState<boolean>(false)
   const [listPublications, setListPublications] =
-    useState<IResApi<IPublication> | null>(null)
+    useState<IResApi<IPublicationList> | null>(null)
 
-  const getPublications = async (query: IQuery) => {
+  const getPublications = async (query: IPublicationFilter) => {
     setLoading(true)
-    const { page, name } = query
 
-    const path = `portal/PublicacionList/?page=${page}&nombre__icontains=${name}`
-    const response = await fetchCore(path, { method: 'GET' })
+    const response = await fetchPublicationsList(query)
 
-    if (!response?.ok) {
-      throw new Error('Error al cargar los archivos')
+    if (response.ok) {
+      const publications: IResApi<IPublicationList> =
+        (await response.json()) as IResApi<IPublicationList>
+      setListPublications(publications)
+    } else {
+      setListPublications(null)
     }
-
-    const data: IResApi<IPublication> =
-      (await response.json()) as IResApi<IPublication>
-
-    setListPublications(data)
     setLoading(false)
   }
 

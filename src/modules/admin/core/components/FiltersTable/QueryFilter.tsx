@@ -49,15 +49,19 @@ export const QueryFilter = (props: IProps) => {
       variant="bordered"
       radius="sm"
       startContent={
+        <div>
+          <IconSearch size={18} />
+        </div>
+      }
+      endContent={
         <Select
           aria-label="Filtrar por"
           size="sm"
           radius="sm"
-          defaultSelectedKeys={[`${defaultSelectedKeys}`] || ['']}
+          defaultSelectedKeys={[`${defaultSelectedKeys}`]}
           disallowEmptySelection
-          startContent={<IconSearch size={18} />}
           classNames={classNames || defaultClassName}
-          value={queryType || ''}
+          value={queryType}
           onSelectionChange={(value) => handleFilter(value)}
         >
           {optionsFilter.map((item) => (

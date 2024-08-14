@@ -2,14 +2,14 @@ import { FrmAddPerson, HeaderSection } from '@/modules/admin'
 
 export default async function Page() {
   return (
-    <>
-      <HeaderSection
-        title="Nuevo persona"
-        subtitle="Agrega un nuevo persona al sistema."
-      />
-      <main className="py-4 w-full flex flex-col justify-center items-center">
+    <main className="flex flex-col items-center justify-center w-full">
+      <section className="section-panel flex flex-col gap-4 max-w-6xl w-full">
+        <HeaderSection
+          title="Nuevo persona"
+          subtitle="Agrega un nuevo persona al sistema."
+        />
         <FrmAddPerson />
-      </main>
-    </>
+      </section>
+    </main>
   )
 }

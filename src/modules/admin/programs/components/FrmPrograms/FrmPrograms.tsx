@@ -8,6 +8,7 @@ import { FileData, InfoData } from './sections'
 import { DialogAction } from '@/components'
 
 import { toast } from 'react-toastify'
+import { HeaderSection } from '@/modules/admin'
 
 const isProduction = process.env.NODE_ENV === 'production'
 const urlProd = process.env.API_URL_DEV
@@ -93,35 +94,48 @@ export const FrmAddProgram = (props: IProps) => {
     router.push('/admin/idiomas')
   }
 
+  const title = data?.id ? 'Editar idioma' : 'Nuevo idioma'
+  const subtitle = data?.id
+    ? `Edita la información del idioma ${data.nombre}`
+    : 'Agrega un nuevo idioma al sistema'
+
   return (
     <>
-      <FormProvider {...methods}>
-        <form
-          className="max-w-xl flex flex-col gap-6"
-          onSubmit={methods.handleSubmit(onSubmit)}
-        >
-          <InfoData />
-          <FileData />
-          <footer className="flex items-center gap-3 justify-end">
-            <Button
-              className="button-dark"
-              radius="sm"
-              type="submit"
-              isDisabled={loading}
-              isLoading={loading}
+      <main className="flex flex-col items-center">
+        <section className="section-panel max-w-xl  w-full flex flex-col gap-4">
+          <HeaderSection
+            title={title}
+            subtitle={subtitle}
+          />
+          <FormProvider {...methods}>
+            <form
+              className="flex flex-col gap-6 w-full"
+              onSubmit={methods.handleSubmit(onSubmit)}
             >
-              Guardar
-            </Button>
+              <InfoData />
+              <FileData />
+              <footer className="flex items-center gap-3 justify-end">
+                <Button
+                  className="button-dark"
+                  radius="sm"
+                  type="submit"
+                  isDisabled={loading}
+                  isLoading={loading}
+                >
+                  Guardar
+                </Button>
 
-            <Button
-              radius="sm"
-              onPress={handleCancel}
-            >
-              Cancelar
-            </Button>
-          </footer>
-        </form>
-      </FormProvider>
+                <Button
+                  radius="sm"
+                  onPress={handleCancel}
+                >
+                  Cancelar
+                </Button>
+              </footer>
+            </form>
+          </FormProvider>
+        </section>
+      </main>
       <DialogAction
         isOpen={isOpen}
         setOpen={setOpen}

@@ -1,10 +1,10 @@
-import { IPublication } from '@/types'
+import { IPublication, IPublicationList } from '@/types'
 import { converDate } from '@/utils'
 import { Card, CardBody, CardFooter } from '@nextui-org/react'
 import Link from 'next/link'
 
 interface IProps {
-  publication: IPublication
+  publication: IPublicationList
 }
 
 export const CardPublicationList = (props: IProps) => {

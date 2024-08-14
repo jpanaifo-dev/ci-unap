@@ -1,6 +1,6 @@
-import { fetchCore } from '@/api'
-import { TestimonialModal } from '@/modules/admin'
-import { IResApi, ITestimony } from '@/types'
+import { FrmDetailsTestimonio } from '@/modules/admin'
+import { IResApi, ITestimonyList } from '@/types'
+import { fetchTestimonioList } from '@/api'
 interface IProps {
   params: {
     id: string
@@ -10,23 +10,28 @@ interface IProps {
 export default async function Page(props: IProps) {
   const { id } = props.params
 
-  const res = await fetchCore(`portal/TestimonioList/?id=${id}`, {
-    method: 'GET',
-    cache: 'reload',
-    next: {
-      revalidate: 0.3,
-    },
-  })
-
-  if (!res.ok) {
-    return <div>Error</div>
+  let testimonio: IResApi<ITestimonyList> = {
+    count: 0,
+    next: null,
+    previous: null,
+    results: [],
   }
 
-  const data: IResApi<ITestimony> = (await res.json()) as IResApi<ITestimony>
+  try {
+    const res = await fetchTestimonioList({ id: id })
+
+    if (!res.ok) {
+      return <div>Error</div>
+    } else {
+      testimonio = (await res.json()) as IResApi<ITestimonyList>
+    }
+  } catch (error) {
+    console.error(error)
+  }
 
   return (
     <>
-      <TestimonialModal defaulData={data.results[0]} />
+      <FrmDetailsTestimonio defaulData={testimonio.results[0]} />
     </>
   )
 }

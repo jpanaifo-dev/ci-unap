@@ -1,21 +1,23 @@
 'use client'
 import { useState } from 'react'
 import { DialogAction } from '@/components'
-import { IPublication, IPublicationFile, IResApi } from '@/types'
-import {
-  Button,
-  Chip,
-  Divider,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalHeader,
-} from '@nextui-org/react'
+import { IPublicationFileList, IPublicationList } from '@/types'
+import { Button } from '@nextui-org/react'
 import { useRouter } from 'next/navigation'
 import { toast } from 'react-toastify'
 
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form'
-import { ActionData, PFileTypeData, FileData, InfoData } from './sections'
+import {
+  ActionData,
+  PFileTypeData,
+  FileData,
+  InfoData,
+  TabSection,
+} from './sections'
+import { HeaderSection } from '@/modules/admin'
+import { useFilterFromUrl } from '@/hooks'
+import Link from 'next/link'
+import { IconArrowNarrowLeft } from '@tabler/icons-react'
 
 const isProduction = process.env.NODE_ENV === 'production'
 const urlProd = process.env.API_URL_DEV
@@ -24,32 +26,20 @@ const urlLocal = process.env.API_URL_PROD
 const urlBase = isProduction ? urlProd : urlLocal
 
 interface IProps {
-  publication?: IPublication
-  publicationFiles?: IResApi<IPublicationFile>
-}
-
-const renderContent = (content: string) => {
-  return (
-    <div
-      className="custom-quill"
-      dangerouslySetInnerHTML={{ __html: content }}
-    />
-  )
+  publication?: IPublicationList
 }
 
 export const FrmContentForPublication = (props: IProps) => {
   const [isOpen, setOpen] = useState(false)
   const [loading, setLoading] = useState(false)
-  const { publication, publicationFiles } = props
-  const {
-    titulo: title_Publication,
-    contenido,
-    fecha: date_Publication,
-    tipo,
-  } = publication || {}
-  const router = useRouter()
+  const { publication } = props
 
-  const methods = useForm<IPublicationFile>({
+  const router = useRouter()
+  const { getParams } = useFilterFromUrl()
+
+  const view = getParams('view', 'preview')
+
+  const methods = useForm<IPublicationFileList>({
     defaultValues: {
       publicacion: publication,
       is_active: true,
@@ -61,8 +51,8 @@ export const FrmContentForPublication = (props: IProps) => {
     setOpen(true)
   }
 
-  const handleFormSubmit: SubmitHandler<IPublicationFile> = async (
-    data: IPublicationFile
+  const handleFormSubmit: SubmitHandler<IPublicationFileList> = async (
+    data: IPublicationFileList
   ) => {
     setLoading(true)
     setOpen(false)
@@ -87,11 +77,13 @@ export const FrmContentForPublication = (props: IProps) => {
       }
     })
 
-    const endpoint = `${urlBase}portal/PublicacionFile/`
+    const endpoint = data.id
+      ? `${urlBase}portal/PublicacionFile/${data.id}/`
+      : `${urlBase}portal/PublicacionFile/`
 
     try {
       const res = await fetch(endpoint, {
-        method: 'POST',
+        method: data.id ? 'PUT' : 'POST',
         body: formData,
         headers: {
           Accept: 'application/json',
@@ -100,8 +92,8 @@ export const FrmContentForPublication = (props: IProps) => {
 
       if (res.ok) {
         const data = await res.json()
-        console.log(data)
-        toast.success('Contenido de la publicación guardado correctamente')
+        const message = data.id ? 'actualizado' : 'creado'
+        toast.success(`Contenido de la publicación ${message} correctamente.`)
         handleExit()
       } else {
         const errorData: Record<string, string[]> = await res.json()
@@ -119,85 +111,67 @@ export const FrmContentForPublication = (props: IProps) => {
     } finally {
       setLoading(false)
     }
-
-    setLoading(false)
   }
 
   const handleExit = () => {
-    router.push('/admin/portal/publicaciones/')
+    router.push(`/admin/portal/publicaciones/${publication?.id}/contenido`)
+    methods.reset()
   }
 
   return (
     <>
-      <Modal
-        isOpen
-        size="5xl"
-        radius="sm"
-        onClose={handleExit}
-        scrollBehavior="inside"
-      >
-        <ModalContent>
-          <ModalHeader>
-            <h1 className="font-bold text-xl">
-              Vista previa de la publicación
-            </h1>
-          </ModalHeader>
-          <Divider />
-          <ModalBody>
-            <main className="grid grid-cols-1 lg:grid-cols-2 py-3 gap-4">
-              <section className="flex flex-col gap-3">
-                <header>
-                  <Chip
-                    radius="sm"
-                    size="sm"
-                    variant="faded"
-                    color="warning"
-                  >
-                    {tipo?.nombre}
-                  </Chip>
-                  <h1 className="font-bold text-3xl">{title_Publication}</h1>
-                </header>
-                <article>
-                  <h1 className="font-medium">Fecha de publicación</h1>
-                  <p className="text-gray-500text-sm">{date_Publication}</p>
-                </article>
-                <section>{renderContent(contenido || '')}</section>
-              </section>
-              <section>
-                <FormProvider {...methods}>
-                  <form
-                    className="flex flex-col gap-3"
-                    onSubmit={methods.handleSubmit(onSubmit)}
-                  >
-                    <FileData />
-                    <InfoData />
-                    <PFileTypeData />
-                    <ActionData />
-                    <footer className="flex items-center gap-3 justify-end">
-                      <Button
-                        className="button-dark"
-                        radius="sm"
-                        isLoading={loading}
-                        isDisabled={loading}
-                        type="submit"
-                      >
-                        Añadir archivo
-                      </Button>
+      <FormProvider {...methods}>
+        <main className="grid grid-cols-1 lg:grid-cols-2 py-3 gap-4">
+          <section className="section-panel">
+            <form
+              className="flex flex-col gap-3"
+              onSubmit={methods.handleSubmit(onSubmit)}
+            >
+              <div>
+                <Button
+                  as={Link}
+                  variant="light"
+                  color="primary"
+                  href={`/admin/portal/publicaciones/`}
+                  startContent={<IconArrowNarrowLeft stroke={1} />}
+                  size="sm"
+                >
+                  Atrás
+                </Button>
+              </div>
+              <HeaderSection
+                title="Archivo multimedia de la publicación"
+                subtitle="Añade un archivo multimedia a la publicación"
+              />
+              <FileData />
+              <InfoData />
+              <PFileTypeData />
+              <ActionData />
+              <footer className="flex items-center gap-3 justify-end">
+                <Button
+                  className="button-dark"
+                  radius="sm"
+                  isLoading={loading}
+                  isDisabled={loading}
+                  type="submit"
+                >
+                  {methods.formState.isDirty ? 'Guardar cambios' : 'Guardar'}
+                </Button>
 
-                      <Button
-                        radius="sm"
-                        onPress={handleExit}
-                      >
-                        Cancelar
-                      </Button>
-                    </footer>
-                  </form>
-                </FormProvider>
-              </section>
-            </main>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
+                <Button
+                  radius="sm"
+                  onPress={handleExit}
+                >
+                  Cancelar
+                </Button>
+              </footer>
+            </form>
+          </section>
+          <section>
+            <TabSection data={publication} />
+          </section>
+        </main>
+      </FormProvider>
 
       <DialogAction
         isOpen={isOpen}

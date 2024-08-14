@@ -1,52 +1,66 @@
 'use client'
-import { IPublication } from '@/types'
-import { Controller, useFormContext } from 'react-hook-form'
-import dynamic from 'next/dynamic'
-
-//For the text field
-const ReactQuill = dynamic(() => import('react-quill'), { ssr: false })
-import 'react-quill/dist/quill.snow.css'
-
-// import ReactQuill from 'react-quill'
+import { useState } from 'react'
+import { DrawerCustom } from '@/modules/admin'
+import { IPublicationFileList } from '@/types'
+import { Button, Input } from '@nextui-org/react'
+import { IconLink } from '@tabler/icons-react'
+import { useFormContext, Controller } from 'react-hook-form'
+import { ContentList } from './ContentList'
 
 export const ContentData = () => {
-  const {
-    control,
-    formState: { errors },
-  } = useFormContext<IPublication>()
+  const [isOpen, setIsOpen] = useState(false)
+  const { control, setValue } = useFormContext<IPublicationFileList>()
+
+  const handleSelectValue = (value: any) => {
+    setValue('publicacion', value)
+    setIsOpen(false)
+  }
 
   return (
     <>
-      {/* Your content goes here */}
-      <section className="pb-14">
-        <label
-          htmlFor="contenido"
-          className="text-sm pb-2"
-        >
-          Contenido
-          {errors.contenido !== undefined && (
-            <span className="text-danger-500 ml-1">
-              {errors.contenido.message}
-            </span>
-          )}
-        </label>
-        {/* the className is used to define css variables necessary for the editor */}
-        <Controller
-          control={control}
-          name="contenido"
-          rules={{
-            required: 'Ingrese el contenido de la publicación',
-          }}
-          render={({ field: { value, onChange } }) => (
-            <ReactQuill
-              value={value}
-              onChange={onChange}
-              theme="snow"
-              className="h-52"
-            />
-          )}
-        />
-      </section>
+      <Controller
+        control={control}
+        name="publicacion"
+        rules={{
+          required: 'Seleccione un contenido para la publicación',
+        }}
+        render={({ field: { value, onChange } }) => (
+          <Input
+            aria-label="publicacion"
+            placeholder="Seleccione un contenido para la publicación"
+            radius="sm"
+            variant="bordered"
+            value={
+              value
+                ? `${value?.titulo} - ${value?.tipo?.nombre} - ${value?.fecha}`
+                : ''
+            }
+            onChange={onChange}
+            // isInvalid={errors.publicacion !== undefined}
+            // errorMessage={errors.publicacion?.message as string}
+            required
+            errorMessage="Seleccione un contenido para la publicación"
+            endContent={
+              <div>
+                <Button
+                  size="sm"
+                  radius="sm"
+                  startContent={<IconLink size={16} />}
+                  onPress={() => setIsOpen(true)}
+                >
+                  Seleccionar
+                </Button>
+              </div>
+            }
+          />
+        )}
+      />
+      <DrawerCustom
+        isOpen={isOpen}
+        setOpen={setIsOpen}
+        title="Seleccionar publicación"
+        content={<ContentList onSelectValue={handleSelectValue} />}
+      />
     </>
   )
 }

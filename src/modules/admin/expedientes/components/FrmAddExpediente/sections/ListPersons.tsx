@@ -16,8 +16,13 @@ const columns: IColumns[] = [
     align: 'center',
   },
   {
-    key: 'apellido',
-    label: 'Apellido',
+    key: 'apellido_paterno',
+    label: 'Apellido Paterno',
+    align: 'center',
+  },
+  {
+    key: 'apellido_materno',
+    label: 'Apellido Materno',
     align: 'center',
   },
   {
@@ -52,7 +57,8 @@ export const ListPersons = (props: IProps) => {
       key: item.id,
       id: item.id,
       nombres: item.nombres,
-      apellido: item.apellido_paterno + ' ' + item.apellido_materno,
+      apellido_paterno: item.apellido_paterno,
+      apellido_materno: item.apellido_materno,
       numberDoc: item.numero_documento,
     }
   })

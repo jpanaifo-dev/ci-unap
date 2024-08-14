@@ -37,7 +37,6 @@ export const InfoData = () => {
         control={control}
         name="link"
         rules={{
-          required: 'Este campo es requerido',
           pattern: {
             value:
               /^((http|https):\/\/)?(www\.)?([\w-]+\.)+[\w-]+(\/[\w- ./?%&=]*)?$/,

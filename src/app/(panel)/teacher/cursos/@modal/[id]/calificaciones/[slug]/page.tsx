@@ -1,4 +1,4 @@
-import { FrmAsistenciaEditor, FrmScoreEditor } from '@/modules/teacher'
+import { FrmScoreEditor } from '@/modules/teacher'
 import { fetchCore } from '@/api'
 import { IResApi, IInscriptions } from '@/types'
 

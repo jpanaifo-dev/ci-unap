@@ -6,6 +6,7 @@ import { TableCustom, IRows, useEnrollments, IActions } from '@/modules/admin'
 import { col } from './columsData'
 import { useFilterFromUrl } from '@/hooks'
 import { TopContent } from './TopContent'
+import { formatDate } from '@/utils'
 
 const actions: IActions[] = [
   {
@@ -47,7 +48,7 @@ export const ListEnrollments = () => {
   const rows: IRows[] = tiposDocs?.map((item) => {
     return {
       key: item?.id,
-      fecha: item?.fecha,
+      fecha: formatDate(item?.fecha),
       alumno: renderColPerson(item?.expediente?.persona),
       programa: renderColProgram(item?.expediente?.programa),
       nivel: renderColLevel(item?.nivel),

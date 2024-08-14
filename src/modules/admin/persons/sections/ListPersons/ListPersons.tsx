@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import {
   TableCustom,
   IActions,

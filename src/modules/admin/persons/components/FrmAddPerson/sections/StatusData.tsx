@@ -5,7 +5,7 @@ import { IPerson } from '@/types'
 import { Checkbox, Input, Select, SelectItem } from '@nextui-org/react'
 import { useFormContext, Controller } from 'react-hook-form'
 
-import { useCivilStatus } from '@/modules/admin'
+import { LayoutFrmHorizontal, useCivilStatus } from '@/modules/admin'
 
 const optionsSexo = [
   { id: 'M', sexo: 'Masculino' },
@@ -27,7 +27,10 @@ export const StatusData = () => {
   const docsType = listStatus?.results || []
 
   return (
-    <>
+    <LayoutFrmHorizontal
+      title="Datos de estado civil"
+      subtitle="Ingresa los datos de estado civil de la persona"
+    >
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
         <Controller
           name="sexo"
@@ -43,7 +46,7 @@ export const StatusData = () => {
               placeholder="Seleccione..."
               radius="sm"
               variant="bordered"
-              selectedKeys={[String(value)] || ['']}
+              selectedKeys={value ? [String(value)] : []}
               onChange={(value) => {
                 onChange(value)
               }}
@@ -76,7 +79,7 @@ export const StatusData = () => {
               placeholder="Seleccione..."
               radius="sm"
               variant="bordered"
-              selectedKeys={[String(value)] || ['']}
+              selectedKeys={value ? [String(value)] : []}
               onChange={onChange}
               isInvalid={errors.estado_civil !== undefined}
               errorMessage={errors.estado_civil?.message as string}
@@ -110,7 +113,7 @@ export const StatusData = () => {
               placeholder="Ejemplo: Ingeniero"
               radius="sm"
               variant="bordered"
-              value={value || ''}
+              value={value}
               onChange={onChange}
               isInvalid={errors.ocupacion ? true : false}
               errorMessage={errors.ocupacion?.message as string}
@@ -130,6 +133,6 @@ export const StatusData = () => {
           )}
         />
       </div>
-    </>
+    </LayoutFrmHorizontal>
   )
 }

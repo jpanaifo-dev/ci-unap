@@ -2,7 +2,7 @@ import { HeaderSection, ListPayments, UpPaymetsSection } from '@/modules/admin'
 
 export default function Page() {
   return (
-    <>
+    <main className="w-full flex flex-col gap-4 section-panel">
       <HeaderSection
         title="Pagos"
         subtitle="Administrar pagos"
@@ -11,9 +11,7 @@ export default function Page() {
         href="/admin/pagos/nuevo"
         rigthContent={<UpPaymetsSection />}
       />
-      <main className="py-4">
-        <ListPayments />
-      </main>
-    </>
+      <ListPayments />
+    </main>
   )
 }

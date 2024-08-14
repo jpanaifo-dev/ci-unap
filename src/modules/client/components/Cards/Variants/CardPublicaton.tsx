@@ -7,6 +7,10 @@ import { imgCiusaurio } from '@/assets'
 import { converDate } from '@/utils'
 import { renderContent } from '@/modules/core'
 
+const showContent = (content: string) => {
+  return { __html: content }
+}
+
 export const CardPublication = (props: IPublicationFile) => {
   const {
     archivo,

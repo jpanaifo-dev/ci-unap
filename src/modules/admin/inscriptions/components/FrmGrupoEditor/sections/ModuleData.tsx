@@ -38,8 +38,8 @@ export const ModuleData = () => {
             variant="bordered"
             value={value?.nombre}
             onValueChange={onChange}
-            isInvalid={errors.modulo?.nombre !== undefined}
-            errorMessage={errors.modulo?.message as string}
+            isRequired
+            errorMessage="Seleccione un módulo"
             endContent={
               <div>
                 <Button

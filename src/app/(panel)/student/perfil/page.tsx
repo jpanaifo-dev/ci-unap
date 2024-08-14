@@ -1,16 +1,13 @@
 import { fetchCore } from '@/api'
-import { getCookie } from '@/utils'
-import { IPerson, IResApi, IResCookie } from '@/types'
+import { IPerson, IResApi } from '@/types'
 import { PersonalData } from '@/modules/core'
 
-const appName = process.env.APP_NAME
+import { getPersonId } from '@/libs'
 
 export default async function ProfilePage() {
-  const cookie: IResCookie = (await getCookie(
-    `${appName}_persona_id`
-  )) as IResCookie
+  const personId = await getPersonId()
 
-  const res = await fetchCore(`gestor/PersonaList/?id=${cookie.value}`, {
+  const res = await fetchCore(`gestor/PersonaList/?id=${personId}`, {
     method: 'GET',
   })
 

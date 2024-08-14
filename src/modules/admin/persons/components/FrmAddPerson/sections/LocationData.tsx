@@ -1,4 +1,5 @@
 'use client'
+import { LayoutFrmHorizontal } from '@/modules/admin/core'
 import { IPerson } from '@/types'
 import { DateInput, Input } from '@nextui-org/react'
 import { useFormContext, Controller } from 'react-hook-form'
@@ -10,7 +11,10 @@ export const LocationData = () => {
   } = useFormContext<IPerson>()
 
   return (
-    <>
+    <LayoutFrmHorizontal
+      title="Datos de ubicación"
+      subtitle="Ingresa los datos de ubicación y nacimiento de la persona"
+    >
       <section className="flex gap-6 items-center">
         <Controller
           name="fecha_nacimiento"
@@ -143,6 +147,6 @@ export const LocationData = () => {
           )}
         />
       </section>
-    </>
+    </LayoutFrmHorizontal>
   )
 }
