@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.section-gray {
+  @apply bg-gray-100;
+}
+
+.section {
+  @apply py-14 sm:py-16 lg:py-24;
+}
+
+.button-dark {
+  @apply bg-success-800 text-white hover:bg-success-500;
+}
+
+.description-sm {
+  @apply text-sm text-gray-500;
+}
+
+/* styles/globals.css */
+.custom-quill {
+  h1 {
+    @apply text-4xl font-bold;
+  }
+
+  h2 {
+    @apply text-3xl font-semibold;
+  }
+
+  h3 {
+    @apply text-2xl font-medium;
+  }
+
+  h4 {
+    @apply text-xl font-medium;
+  }
+
+  p {
+    @apply text-base;
+  }
+
+  strong {
+    @apply font-bold;
+  }
+}
+
+/*styles panel.css*/
+.bg-panel {
+  @apply bg-gray-100 dark:bg-gray-700;
+}
+
+.section-panel {
+  @apply bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 p-4 sm:p-6 rounded-lg;
+}
+
+.section-panel-sticky {
+  @apply bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 px-4 pt-4 sm:px-6 sm:pt-6 pb-0 rounded-lg;
+}
+
+.title-section {
+  @apply text-lg font-bold;
+}
+
+.description-section {
+  @apply text-sm text-gray-500;
+}
+
+.title-form {
+  @apply text-sm font-bold;
+}
+
+.description-form {
+  @apply text-xs text-gray-500;
+}

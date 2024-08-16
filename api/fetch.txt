@@ -1,0 +1,56 @@
+// // import { IUser } from '@/types'
+// // import { getCookie } from '@/utils/actions'
+
+// const isProduction = process.env.NODE_ENV === 'production'
+// const urlProd = process.env.API_URL_DEV
+// const urlLocal = process.env.API_URL_PROD
+
+// const urlBase = isProduction ? urlProd : urlLocal
+
+// export async function fetchCore(
+//   path: string,
+//   options: RequestInit,
+//   nextConfig?: { [key: string]: any } // Definición de nextConfig
+// ) {
+//   try {
+//     //   const cookieValue: IRes = (await getCookie(
+//     //     `${process.env.APP_NAME}_user`
+//     //   )) as IRes
+//     //   const userData: IUser = JSON.parse(cookieValue.value)
+
+//     //   const tokenValue: IRes = (await getCookie(
+//     //     `${process.env.APP_NAME}_token`
+//     //   )) as IRes
+//     //   const token = tokenValue.value
+
+//     const headers: Record<string, string> = {
+//       'Content-Type': 'application/json',
+//       Accept: 'application/json',
+
+//       // 'app-name': appName || '',
+//     }
+
+//     //   if (token) {
+//     //     headers.Authorization = `token ${token}`
+//     //   }
+
+//     //   if (userData) {
+//     //     headers['user'] = JSON.stringify(userData)
+//     //   }
+
+//     const newOptions = {
+//       ...options,
+//       headers: { ...headers, ...(options?.headers || {}) },
+//       ...nextConfig,
+//     }
+
+//     // const url = `${urlBase}${path}`
+//     const url = `${urlBase}${path}`
+
+//     return await fetch(url, newOptions)
+//   } catch (error) {
+//     // Handle your error here, you can log it or throw a custom error
+//     console.error('An error occurred during fetchCore:', error)
+//     throw error
+//   }
+// }
